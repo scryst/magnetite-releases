@@ -9,6 +9,8 @@ turns real system audio into one continuous reservoir of black ferrofluid.
 
 [See the live demo](https://magnetite.app/) · [Download Magnetite v0.1.0](https://github.com/scryst/magnetite-releases/releases/tag/v0.1.0)
 
+[Privacy](https://magnetite.app/privacy.html) · [Terms](https://magnetite.app/terms.html)
+
 Requires macOS 26 on Apple silicon. The current build is ad-hoc signed, so the
 first launch may require one approval under System Settings › Privacy & Security
 › Open Anyway.
