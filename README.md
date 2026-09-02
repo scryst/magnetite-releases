@@ -11,6 +11,18 @@ turns real system audio into one continuous reservoir of black ferrofluid.
 
 [Privacy](https://magnetite.app/privacy.html) · [Terms](https://magnetite.app/terms.html)
 
+## Verify the download
+
+Download the ZIP and matching `.sha256` file from the same release, keep them
+in one folder, then run:
+
+```sh
+shasum -a 256 -c Magnetite-0.1.0.sha256
+```
+
+The result must say `Magnetite-0.1.0.zip: OK`. Official binaries are published
+only through this repository's [Releases](https://github.com/scryst/magnetite-releases/releases).
+
 Requires macOS 26 on Apple silicon. The current build is ad-hoc signed, so the
 first launch may require one approval under System Settings › Privacy & Security
 › Open Anyway.
@@ -18,3 +30,7 @@ first launch may require one approval under System Settings › Privacy & Securi
 This public repository contains official binaries and release notes for a
 personal project by [scryst](https://github.com/scryst). The application source
 remains private. No trackers. No frameworks.
+
+For bugs or product feedback, open an
+[issue](https://github.com/scryst/magnetite-releases/issues). Report suspected
+security problems privately as described in [SECURITY.md](SECURITY.md).
