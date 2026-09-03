@@ -1,0 +1,1057 @@
+/* Magnetite — one page.
+ *
+ * There are two pictures on this site and both of them are the same liquid:
+ * the notch open, and the notch shut. Everything else that used to be here —
+ * five plates, a dimensioned drawing, a two-case bench, a colour picker, a
+ * live readout — was the product explaining itself instead of being shown.
+ *
+ * The ground is a cool grey rather than a colour, because the only colour on
+ * the page should be the absence of one: a black liquid, and the words cut out
+ * of it.
+ *
+ * The sheet is a display, and it is ONE ground. Two rules used to draw the
+ * hardware edges across the page and read as artifacts, not architecture
+ * ("what's with all the lines"); they were cut on sight. A strip of housing
+ * above each edge replaced them and read no better — "white rectangles above
+ * the player and behind the ink" — because the ink is wider than the sheet at
+ * every width below about 1600, so the strip was never a band, only the two
+ * corners the liquid failed to cover and a bar of light over the film. It went
+ * the same way. The hardware is in the shapes and in the footage's own pixels;
+ * the page does not draw it. The instant this acquires a corner radius, a lid,
+ * a wallpaper, or a ruled line, it is a stock mock-up. */
+
+:root {
+  --display: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: 'Martian Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* The world outside the display, and it is only ever BESIDE the display:
+   * past 1600 the sheet stops growing and this is the ground it lies on, down
+   * both flanks, the one place both grounds are visible at once. Under the
+   * sheet it is a fault rather than a ground — see the second aspect-ratio
+   * rule, which takes it out from under a foot that has stopped reaching the
+   * bottom of the window. Above the sheet it does not appear at all: the hero
+   * is welded to the top edge and that edge is the window's, so `theme-color`
+   * is `--screen` and not this. It said this, under a comment here and another
+   * in index.html both describing a strip of paper above the display that has
+   * never existed at any width. Inside the sheet it survives as the label in
+   * the button and nothing else. */
+  --paper: #E8E9EB;
+  /* The display's own field, and now the sheet's only ground. It sits two
+   * steps under the housing so that a strip of paper above a hardware edge
+   * could be seen at a metre, which is the distance a jury looks from; the
+   * strips are gone and the distance is what killed them, since at that range
+   * two corners of light are two corners of light. It is the difference
+   * blend's BACKDROP under the headline; what the letters come back as is
+   * `--headline-source` below. It is also what `theme-color` states, because
+   * the sheet's top edge IS the window's top edge, and on a phone what shows
+   * past the foot, because there the sheet is the whole width and a second
+   * ground would have no edge to belong to. */
+  --screen: #D6D8DE;
+  --ink: #0B0A0C;
+  /* The headline's difference SOURCE: `--screen` minus `--ink`, channel by
+   * channel. #D6D8DE − #0B0A0C = #CBCED2, and that subtraction is the whole
+   * declaration — it is what makes |screen − this| come back as `--ink`
+   * exactly, so a letter standing on the sheet is the same black as the type
+   * beside it and as the liquid above it.
+   *
+   * It was `--screen` itself, which made that difference ZERO: every letter
+   * that left the surface painted #000 while the reservoir painted #0B0A0C.
+   * Eleven levels apart with a glyph's hard edge between them — measured on
+   * the tablet capture, 220,320 pixels of liquid at (11,10,12) against 4,502
+   * at (2,2,2) — so the 'g' of "magnetized." hung under the meniscus as a
+   * darker lozenge. Five independent readings of the page called it a severed
+   * descender or a detached drip, and PRODUCT.md rejects detached droplets by
+   * name. The comment on `.headline` called that state "the headline it would
+   * otherwise be"; the headline everywhere else on this page is `--ink`, and
+   * #000 is the CAMERA CUTOUT's black — the one `render.js` fills the cutout
+   * with and `.notch-button` repeats — which means a hole in the display
+   * rather than a material. Three blacks, one of them by accident.
+   *
+   * The cost is on the other side of the blend: over the liquid the letters
+   * come back as |ink − this| = #C0C4C6 rather than #CBCED2, 11.2:1 rather
+   * than 12.5:1. Both are far past AA, and one black on the page is worth a
+   * level and a third of headroom. */
+  --headline-source: #CBCED2;
+  /* Was #74767B, which is 3.74:1 on the old ground and 3.19 on this one — a
+   * fail at AA, set at eleven pixels, on the line that states what the
+   * download needs. This is 5.50 on the housing and 4.69 on the screen. */
+  --muted: #5A5C62;
+  --hair: 1px;
+
+  --gutter: clamp(20px, 5vw, 72px);
+
+  /* THE HERO BOX IS THE CAMERA. `fitHero` is `height / 72`, so one panel point
+   * is one seventy-second of this box at every width — the box decides the
+   * scale the liquid is drawn at, and therefore how deep it is.
+   *
+   * Stated as the box rather than as the type, because the box is the thing
+   * with the physical meaning and the type is what has to fit inside it: 5.4 ×
+   * clamp(36px, 4.85vw, 70px).
+   *
+   * 4.85vw is not a taste. The box is 5.4 type tall and the camera is 264
+   * points wide by 72 deep, so the canvas comes out 19.8 type wide, and 19.8 ×
+   * 4.85vw is 96vw — the widest the liquid can be drawn and still leave ground
+   * at both ends of the pill. The floor used to break that on a phone, on the
+   * stated ground that the ink was meant to run off both edges there; it is
+   * capped now, and the paragraph below is why.
+   *
+   * The cap is what the crop cost. It was 403.2px against a camera 200 points
+   * wide, which showed a liquid that is 264 points wide — so the shape ended
+   * in a straight cut with page either side of it at every desk width. Framing
+   * the whole liquid at the same sheet width means drawing it smaller: a 320px
+   * cap here, with the headline scaled from the same box. That is the trade,
+   * and it is the right way round — a notch with no ends is not a notch.
+   *
+   * There was an svh term here and it had to go, because it was measuring the
+   * wrong shape. It read `max(26.19vw, min(42svh, 33.49vw))`, and its cap of
+   * 33.49vw is 72/215 — the NOTCH is 185 points wide, plus 15 points of ground
+   * at each end. But the notch is not what this box draws. The LIQUID is 264
+   * points across, so at that cap the picture comes out 122.8vw wide inside a
+   * sheet 100vw wide and the shoulders run 24.5 points off each edge. The
+   * comment that shipped with it said the shoulders "have to sit inside the
+   * frame, not on it" and then sized the frame to a different shape.
+   *
+   * What that cost, measured in a browser at the canvas and the box that clips
+   * it: at 768×1024 the picture overhung by 95px a side, at 889×863 by 109, at
+   * 1080×800 by 84, at 1280×1024 by 61. The ends only reached the screen on
+   * windows wider than about 1.6 times their height — so on every phone, every
+   * tablet, a 1080-wide laptop window and a 1280×1024 monitor, the hero was a
+   * black band with a wavy bottom. A black banner with a liquid hem: the exact
+   * thing the old comment named as the failure to avoid.
+   *
+   * It cannot be repaired by moving the cap. The ends are on screen only while
+   * 280/72 × height ≤ the sheet's width, which is height ≤ 25.71vw, and the
+   * old term starts at 26.19vw. There is no width where it can win and the
+   * camera can still fit. A term that can only act by breaking the picture is
+   * not a term.
+   *
+   * The emptiness it was added for — "233px of liquid over 413px of nothing"
+   * on an 889×863 pane — is already answered further down by the
+   * `max-aspect-ratio: 5/4` rule, which stops the sheet filling a tall window
+   * and states the air instead. With the term gone that pane is 55px SHORTER
+   * than it was, and the notch has 10px of ground at each end.
+   *
+   * The floor had the same fault one screen further down, and it was left
+   * standing once already on the ground that a phone hero deep enough to end
+   * sets its headline at nineteen pixels. That was a price, not a look. Both
+   * readings rendered at 320 and at 390 and looked at: as it stood, 194.4px of
+   * box is 712.8px of liquid, so the ink ran 103px off each edge at 390 and
+   * 144px at 320, where "magnetized." reaches both edges of the screen and the
+   * hero is a black field with a wavy hem — no ends, no shape, nothing that
+   * says notch, on the three widths a shared link is most likely to be opened
+   * at. Capped, the shape has 40.5px of ground each side at 390 and 26.8px at
+   * 320 and reads as an object on the sheet; the headline goes 36px to 18.9px
+   * and 15.4px and stays the largest type on the page. The type is not more
+   * cramped for it — it clears the hem by 4.6% of the hero's own height where
+   * it cleared by 4.4% before, because both scale together. And 320 comes out
+   * 112px shorter, 808 to 696, on the one window that cannot help scrolling.
+   * The page's argument is a shape, so the shape is what the floor gives way
+   * to.
+   *
+   * The cap is the height whose camera still fits: 72/280 of the sheet, less
+   * the 15px a classic scrollbar takes — the same 15 `theHeroKeepsItsEnds`
+   * subtracts, and it checks that these two agree.
+   *
+   * It wraps the whole clamp and not one of its terms, so no branch of the
+   * responsive expression can grow beyond the width that keeps both ends in
+   * frame.
+   *
+   * `theHeroKeepsItsEnds` in portcheck now recomputes this from the liquid's
+   * own extent and fails if the expression drifts back over the line. */
+  --hero-height: min(clamp(194.4px, 22.22vw, 320px), calc((100vw - 15px) * 72 / 280));
+  --hero-type: calc(var(--hero-height) / 5.4);
+
+  /* The two hardware edges, in the camera's own numbers. `HERO_WINDOW.y` is −8
+   * and the notch is 32 deep, so the display's top edge is 8 points into a
+   * 72-point box and the menu bar's bottom edge is 40. Both are recomputed
+   * from site.js and geometry.js by `theHeroHangsFromTheDisplaysEdge`. */
+  --edge-display: calc(8 / 72 * var(--hero-height));
+  --edge-bar: calc(40 / 72 * var(--hero-height));
+
+  /* The band's WISH, not its size. The picture is 400 by 40 panel points, so
+   * its height is a tenth of whatever width it is given and the menu bar
+   * inside it is the lower 80% of that. Where the two marks either side cannot
+   * both fit beside it — below roughly 1100px — the band is what gives way,
+   * because the marks are type and the band is a picture that scales. */
+  --band-w: min(46vw, 760px);
+
+  /* The wordmark, at menu-bar scale rather than at masthead scale, and the
+   * middle register the page did not have: one shout and one whisper is not a
+   * typographic scale, it is two voices.
+   *
+   * The 16px floor was a floor against nothing until the hero got one too.
+   * Capping the phone hero took `--hero-type` down with it — 15.4px at 320 —
+   * while this stayed pinned at its floor, so MAGNETITE and FE3O4 in the foot
+   * came out at 16px and the masthead was the THIRD largest thing on the page,
+   * at 0.96 of the wordmark it is supposed to tower over. Measured on the live
+   * page, and it inverts below about 332px, which is exactly where the hero's
+   * own cap starts to bite hardest.
+   *
+   * So the middle register is held under the shout: nine tenths of the
+   * headline. It binds only below 367px and is inert at every width above —
+   * measured on the live page rather than estimated, because the crossover is
+   * where a claim like this one goes stale: at 366 the cap gives 15.95px and
+   * at 368 the clamp's own 16px floor is back on top. At 320 it is 13.9px
+   * against a 15.4px headline and 11px of fine print — the shout is back on
+   * top, which is the thing that was broken.
+   *
+   * What the cap costs, said out loud rather than left to be found: below
+   * 323px the mark also passes under the LEDE, 13.86 against its 14px floor at
+   * 320. That floor is a reading floor and the mark's is not — the mark is
+   * uppercase Archivo 900 with tracking and reads as a mark two points down,
+   * where body copy at 13px is just smaller. Holding the mark above the lede
+   * would mean either a tie, which is not a rank, or shrinking the lede to
+   * protect a wordmark, which is the page serving its own furniture. Three
+   * phone widths pay for it.
+   *
+   * `theHeadlineIsTheLargestTypeOnThePage` holds it now, because this was
+   * asserted in three separate comments while being false. */
+  --t-mark: min(clamp(16px, 1.45vw + 6px, 30px), calc(var(--hero-type) * 0.9));
+  --t-lede: clamp(14px, 0.9vw + 8px, 21px);
+  --t-fine: 11px;
+
+  /* The wordmark's own width, which the foot's row needs as a number and
+   * cannot ask the layout for. Archivo 900 at wdth 125 sets "Magnetite" — plus
+   * the poured M at 0.72em and its 0.42em of air — in 9.617 times the size it
+   * is set at, flat to four figures across every size the clamp can produce;
+   * the fallback face sets the same string in 7.542, so Archivo is the width to
+   * reserve and this is it, rounded up.
+   *
+   * It is the MINIMUM of both side columns in the foot, which is the whole
+   * point. `1fr` takes each column's own content as its floor, so the wide
+   * wordmark held 158px while the formula opposite kept the 109px left over,
+   * and the band — the notch, the one thing on this page centred on real
+   * hardware — sat 24px right of centre at 706 and was called out as such. Two
+   * columns with the same floor are the same width whatever is inside them. */
+  --mark-w: calc(var(--t-mark) * 9.62);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The sheet is the display: the hero welded to the top edge of it, the foot
+ * resting on the bottom, and the held silence in between. `margin-top: auto`
+ * on the foot rather than `justify-content: center` on the column — the hero
+ * has to be ON the top edge, and a centred column moves it by however tall the
+ * window happens to be.
+ *
+ * `svh` because the mobile toolbar collapsing must not make the page taller
+ * than the window it was measured against; where the content is taller than
+ * the viewport it simply scrolls, which is the whole of the responsive
+ * behaviour. Past 1600 the display stops growing and becomes an object lying
+ * on the paper, which is the one place both grounds are visible at once. */
+.sheet {
+  min-height: 100svh;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: flex;
+  flex-direction: column;
+  background: var(--screen);
+}
+
+@media (min-width: 1601px) {
+  .sheet { min-height: auto; }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── The ink, open ────────────────────────────────────────────────────────── */
+
+/* The box is the camera. Its height sets the liquid's scale; the width cap
+ * above keeps the full 280×72 camera inside every supported viewport. It has
+ * no background so the sheet remains the headline's blending backdrop. */
+.hero {
+  position: relative;
+  height: var(--hero-height);
+  /* The hero alone reaches the sheet's edges; the rest keeps the gutter. */
+  margin-inline: calc(var(--gutter) * -1);
+  /* Pointer pull may cross the camera briefly; clip without creating scroll. */
+  overflow: clip;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+/* Reserve the camera's final box before the module writes the canvas. The
+ * intrinsic 300×150 default otherwise expands on first paint and shifts the
+ * page even though the hero section already has a fixed height. */
+.hero__ink {
+  display: block;
+  width: calc(var(--hero-height) * 280 / 72);
+  height: var(--hero-height);
+}
+
+/* The words, knocked out of the liquid.
+ *
+ * `difference` gives both states from one declaration. The source is
+ * `--headline-source`, which is `--screen` minus `--ink`: over the sheet the
+ * result is |screen − (screen − ink)| = `--ink`, the same black the rest of the
+ * page sets type in, and over the liquid it is |ink − (screen − ink)|, a light
+ * value that reads as a hole in the surface. So the same letter is type on the
+ * sheet and a knockout in the ink, and the border between the two is wherever
+ * the surface happens to be this frame. A peak that sweeps a letter carries the
+ * knockout across it.
+ *
+ * The backdrop is the display's field rather than the paper, because that is
+ * the ground under the words. The SOURCE was that same field until the page was
+ * found painting three blacks; `--headline-source` records what the third one
+ * cost the descender of the 'g'.
+ *
+ * Doing it this way rather than compositing type into the canvas keeps the
+ * letters real text in the real face — Archivo at wdth 125, which canvas
+ * cannot ask for — and keeps them legible whatever the liquid does, since
+ * neither state is invisible against its own ground.
+ *
+ * Placed at 24/72 of the box: the camera starts 8 points above the display's
+ * top edge and the notch is 32 deep, so the middle of the notch is 24 points
+ * down of the 72 this box frames. The same two numbers as the camera, and
+ * `theHeroHangsFromTheDisplaysEdge` recomputes this fraction from them. */
+.headline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(24 / 72 * 100%);
+  transform: translateY(-50%);
+  margin: 0;
+  text-align: center;
+  /* Archivo, the same voice as the marks. A molten face (Climate Crisis)
+   * held this line for one commit and was rejected on sight — the liquid
+   * supplies the melt; the type does not repeat it. */
+  font-family: var(--display);
+  font-stretch: 125%;
+  font-weight: 900;
+  font-size: var(--hero-type);
+  line-height: 0.96;
+  letter-spacing: -0.015em;
+  color: var(--headline-source);
+  mix-blend-mode: difference;
+}
+
+/* `inline-block` because a transform needs a box and an inline span has none.
+ * `transform-origin: top` so a stretched letter grows DOWNWARD, away from the
+ * surface pulling it; origin at the centre made them swell both ways and read
+ * as a wobble rather than as weight. */
+.headline__ink { display: inline; }
+.headline__letter {
+  display: inline-block;
+  transform-origin: top center;
+  will-change: transform;
+}
+
+/* One scene, one axis: explanation and filmed proof descend together from the
+ * hero. Explicit gaps keep the composition stable at every viewport height. */
+.showcase {
+  width: min(100%, 1320px);
+  margin: clamp(28px, 2.5vw, 40px) auto 0;
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(0, 720px);
+  align-items: center;
+  gap: clamp(56px, 5vw, 88px);
+}
+.subhead {
+  width: auto;
+  max-width: 430px;
+  margin: 0;
+}
+.subhead > span { display: block; }
+.subhead__what {
+  font-family: var(--display);
+  font-stretch: 125%;
+  font-weight: 900;
+  font-size: clamp(22px, 1.2vw + 9px, 29px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.subhead__proof {
+  max-width: 52ch;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: clamp(11px, 0.25vw + 9px, 13px);
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+/* The real app is the proof. The recut source is 1536×720, large enough to
+ * stay sharp at this 720-point cap on a Retina display. */
+.demo {
+  --demo-w: min(100%, 720px);
+  --demo-house: calc(var(--demo-w) * 8 / 512);
+  --demo-film-h: calc(var(--demo-w) * 240 / 512);
+  width: 100%;
+  margin: 0;
+  position: relative;
+  container-type: inline-size;
+}
+.demo__stage {
+  width: var(--demo-w);
+  /* 119/320 is the hardware inset plus 76% of the 15/32 film height. Add the
+   * inset hairline and one more as breathing room before clipping the tail. */
+  height: calc(100cqw * 119 / 320 + var(--hair) + var(--hair));
+  margin: 0;
+  padding-top: calc(var(--demo-house) + var(--hair));
+  overflow: clip;
+  position: relative;
+}
+.demo__film {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1536 / 720;
+  -webkit-mask-image: linear-gradient(to bottom, var(--ink) 0 68%, transparent 76%);
+  mask-image: linear-gradient(to bottom, var(--ink) 0 68%, transparent 76%);
+}
+.demo__motion {
+  appearance: none;
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--demo-house) + 4px);
+  right: 12px;
+  width: auto;
+  height: 44px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.62;
+  transition: opacity 140ms ease;
+}
+.demo__stage:hover .demo__motion,
+.demo__motion:focus-visible,
+.demo__motion[data-playing="false"] { opacity: 1; }
+
+/* Optional audio belongs to the film's measure. Track choices are a semantic
+ * radio group, not imitation media controls. */
+.soundtrack {
+  width: var(--demo-w);
+  margin: 10px 0 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: clamp(20px, 2.5vw, 36px);
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+.soundtrack button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition: color 140ms ease;
+}
+.soundtrack__toggle {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.soundtrack__toggle-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  transition: opacity 140ms ease;
+}
+.soundtrack__toggle-icon::before {
+  content: '';
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 7px solid currentColor;
+}
+.soundtrack__toggle[aria-pressed="true"] .soundtrack__toggle-icon::before {
+  width: 8px;
+  height: 9px;
+  margin-left: 0;
+  border: 0;
+  border-left: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+.soundtrack__toggle:hover .soundtrack__toggle-icon { opacity: 0.78; }
+.soundtrack__now {
+  min-width: 0;
+  margin: 0;
+  display: grid;
+  line-height: 1.35;
+}
+.soundtrack__now > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink);
+  font-weight: 700;
+}
+.soundtrack__now > span:last-child {
+  color: var(--muted);
+  font-size: 9px;
+}
+.soundtrack__tracks {
+  display: grid;
+  grid-template-columns: repeat(2, 44px);
+  align-items: center;
+  justify-items: start;
+  gap: 2px;
+}
+.soundtrack__track {
+  width: 44px;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: var(--muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.soundtrack__track:hover { color: var(--ink); }
+.soundtrack__track[aria-checked="true"] { color: var(--ink); font-weight: 700; }
+.soundtrack button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* Attribution closes the product footer instead of competing with the film.
+ * It remains in normal flow and uses the page's proven fine-print color. */
+.demo__credit {
+  width: 100%;
+  margin: 18px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.01em;
+  text-align: left;
+  color: var(--muted);
+}
+/* A name is not a place to wrap. Everything this sentence names is a link —
+ * the artist, both works, the terms — so "links do not break" and "names do
+ * not split" are the same rule, and the markup check that makes every named
+ * work a link is what keeps them the same rule.
+ *
+ * Two widths shipped it split. At the 512px measure — the film's own width,
+ * which is what this credit is set to — the line ended “Cyberpunk and the
+ * next began Renaissance”. At 88vw on a 430pt phone the terms broke into CC
+ * and BY 4.0. The longest name is “Cyberpunk Renaissance”, which measures
+ * 180px — this face sets 7.8px per character at eleven — inside the
+ * narrowest measure the sheet can hand it, 88vw of a 320px viewport being
+ * 282px. So nothing here can overflow the stage instead of wrapping. */
+.demo__credit a { color: inherit; white-space: nowrap; text-underline-offset: 2px; }
+
+/* Every link on this page was muted grey with a browser-default underline and
+ * NO hover — five of them, in two spellings of the same idea, one carrying a
+ * tuned underline offset and the other not. A link that does not answer the
+ * pointer is the one place a page this considered was still leaving the
+ * browser to speak for it. The answer is the page's own: the type comes up to
+ * the ink it is set in, which is the same move the button's rim makes, on the
+ * same 140ms. Nothing moves, so Reduce Motion has nothing to suppress. */
+:where(.demo__credit, .note) a {
+  transition: color 140ms ease;
+}
+:where(.demo__credit, .note) a:hover {
+  color: var(--ink);
+}
+
+/* ── The foot: the same menu bar, further away ────────────────────────────── */
+
+/* One row, three items, all of them seated on the band's own baseline — the
+ * menu bar inside the picture, not a drawn rule under it. A full-width border
+ * used to underline this row and went with the rest of the ruled lines; the
+ * band's ink is the only line the foot needs.
+ *
+ * The row still bleeds to the sheet's edges and pads itself back, so the
+ * marks stay on the gutter the rest of the page keeps. */
+.foot {
+  margin-top: clamp(40px, 3vw, 56px);
+  padding-bottom: clamp(32px, 5vw, 56px);
+}
+
+.foot__bar {
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: var(--gutter);
+  display: grid;
+  /* The same floor on both side columns, so they resolve to the same width and
+   * the band between them is centred on the page. Bare `1fr` is
+   * `minmax(auto, 1fr)`, and auto is each column's OWN content: the wordmark
+   * held its 158px while the formula opposite took the 109px left over, which
+   * put the notch 24px right of centre at 706 — on a page whose whole subject
+   * is a notch centred on real hardware. The band's column keeps a floor of 0,
+   * because it is the one that has to give. */
+  grid-template-columns:
+    minmax(var(--mark-w), 1fr) minmax(0, var(--band-w)) minmax(var(--mark-w), 1fr);
+  column-gap: clamp(16px, 2.4vw, 40px);
+  align-items: end;
+}
+/* `IDLE_WINDOW` starts 8 points above the display's top edge of a 40-point
+ * crop, so the menu bar itself is the lower 80% of that picture. The marks sit
+ * inside it, where menu-bar items sit — not beside it.
+ *
+ * 80% of the ROW, not of the width the band asked for. Below about 1100 the
+ * band gives up width to keep the two mark columns equal, and a seat computed
+ * from --band-w would then be a seat for a picture that is not there: two
+ * pixels of it, at 640, with the wordmark floating above the bar it is
+ * supposed to be sitting in. The row is exactly as tall as the band picture,
+ * so the percentage is the picture's own. */
+.foot__bar > .mark {
+  display: flex;
+  align-items: center;
+  height: 80%;
+  margin: 0;
+}
+.foot__bar > .mark--formula { justify-content: flex-end; }
+.bar { width: 100%; }
+
+.mark {
+  font-family: var(--display);
+  font-stretch: 125%;
+  font-weight: 900;
+  font-size: var(--t-mark);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+/* The poured M is a letterform, so it takes the wordmark's own measurements:
+ * cap height tall, with the viewBox trimmed to the mark's own ink bounds so
+ * the height is the ink's height and no padding hides in the number.
+ *
+ * Its seat comes from the PARAGRAPH, not from here: the mark is a flex item
+ * (.foot__bar > .mark is display: flex, align-items: center), so
+ * vertical-align is inert on it — do not reach for that knob. Centering
+ * against the wordmark's one-line box lands the feet a hair under the
+ * baseline, which is right for round bottoms; measured at 6x. If the seat
+ * ever needs a nudge, the honest knob on a flex item is position: relative
+ * with a top offset. */
+.mark__glyph {
+  height: 0.72em;
+  width: auto;
+  margin-right: 0.42em;
+}
+/* At --t-fine this was eleven pixels of grey against a wordmark up to thirty,
+ * so the foot's two ends were not a pair and the page's bottom edge tipped
+ * left. It takes the wordmark's own size now — the mineral's formula and the
+ * mineral's name, one at each end of the menu bar, at the scale menu-bar items
+ * are set at. It stays mono, unstretched, at 400 and in --muted, which is what
+ * keeps it a counterweight rather than a second wordmark. */
+.mark--formula {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-stretch: normal;
+  font-size: var(--t-mark);
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+/* A subscript that renders as a superscript is a different formula. `sub` gets
+ * its own smaller line box and `vertical-align: -0.15em` moved it by 0.15 of
+ * SIX pixels — a pixel — so Fe3O4 printed FE³O⁴, with the digits sitting a
+ * clear 23px above the formula's own bottom at 1440. Measured, after it was
+ * seen. `position: relative` takes the offset off the parent's baseline
+ * instead, where a subscript's drop belongs, and 0.22em of the small size puts
+ * the digits' feet just under it — the depth a chemical formula is set at. */
+.mark--formula sub {
+  font-size: 0.62em;
+  vertical-align: baseline;
+  position: relative;
+  top: 0.22em;
+}
+
+/* Under the line: the product's own claim at the left end and the fine print
+ * at the right, on one baseline. Two greys read as one paragraph with a picture
+ * stuck through the middle of it, so the claim is in ink and at a size that is
+ * neither the headline nor a label — the register the page was missing. */
+/* Four blocks on one row, and until now all four shrank alike — so the row
+ * settled with the product's ONLY claim squeezed into 240px and broken into
+ * three two-word lines, while the Gatekeeper boilerplate beside it held 566px
+ * and the same three. Measured at 1440. Whatever else that row is, it cannot
+ * be an arrangement in which the sentence that says what the app does is the
+ * narrowest thing in it and a warning about an operating-system dialog is the
+ * widest.
+ *
+ * So the claim stops shrinking and the boilerplate becomes the thing that
+ * gives way, which is the order they matter in. */
+.foot__note {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: clamp(10px, 1.2vw, 18px) clamp(16px, 3vw, 48px);
+  padding-top: clamp(10px, 1.2vw, 18px);
+}
+/* The claim takes the whole first line. Four blocks never fitted one row: they
+ * settled with the claim at 240px in three two-word lines and the Gatekeeper
+ * boilerplate at 566px beside it, and pinning the claim only moved the squeeze
+ * onto the requirements, which stacked into four lines of two words. The row
+ * was over-subscribed, so it becomes two: the sentence that says what the app
+ * does, and then the fine print under it, which is the order they are read in
+ * anyway. */
+.foot__note > .note--lede { flex: 0 0 100%; }
+.foot__note > #first-launch { flex: 1 1 auto; }
+.foot__note > [data-requires] { flex: 0 0 auto; }
+.foot__note > .demo__credit { flex: 0 0 100%; }
+/* Balanced, because both of these wrap on a phone and neither reads with one
+ * word alone on the second line: "bar." under the claim, and an orphaned
+ * "524 KB" under the fine print, were what a centred column used to hide. */
+.note {
+  margin: 0;
+  font-size: var(--t-fine);
+  letter-spacing: 0.16em;
+  text-align: right;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--muted);
+}
+/* A link in the fine print is fine print first: browser blue is the only
+ * colour on a page that otherwise has two, so it inherits the register it
+ * sits in and keeps the underline as its whole affordance. */
+.note a {
+  color: inherit;
+  text-underline-offset: 2px;
+}
+/* Twenty-one words of instructional prose, with a › breadcrumb in it, set in
+ * the same uppercase 0.16em tracking as "FE3O4" and the DOWNLOAD cutout — so
+ * the longest sentence on the page was also the one dressed as a label, and it
+ * came out the widest, tallest, greyest block on the sheet. The markup is
+ * already sentence case; dropping the transform gives that back for no copy
+ * change, and takes about a third off its measure. It keeps the row's right
+ * edge: two of the three fine-print blocks are ranged right, and left-aligning
+ * one of three opens a ragged edge in the middle of the row. */
+#first-launch {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  /* Ranged left with the rest. It kept the row's right edge while the notes sat
+   * on one line; on two rows the other three blocks hug their own content at
+   * the left, so a single right-ranged block among them is the only edge in the
+   * foot that answers to nothing above it. */
+  text-align: left;
+}
+
+.note--lede {
+  font-size: var(--t-lede);
+  letter-spacing: 0.005em;
+  text-align: left;
+  text-transform: none;
+  color: var(--ink);
+}
+
+/* At 1100px the proof still holds a 320px explanation beside a sharp 614px
+ * film. Below it, both that scene and the four-phrase note row run out of honest
+ * measure, so the proof becomes one column and the notes become a stack. */
+@media (max-width: 1099px) {
+  .foot__note { display: block; }
+  .note { text-align: left; padding-top: 8px; }
+  .showcase {
+    width: min(100%, 720px);
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(40px, 6vw, 56px);
+  }
+  .subhead { max-width: 680px; }
+}
+
+/* A display that fills the window edge to edge is a wallpaper; one that ends
+ * is an object. Past 1600 the sheet already stops growing sideways and lies
+ * on the paper — this is the same law for windows that are tall for their
+ * width, where pinning the foot to the window's bottom edge poured every
+ * spare point into the field between the two zooms: 413 of an 889×863 pane's
+ * 863 were nothing. Squarer than 5/4 the sheet takes its height from its own
+ * content instead, the field between the zooms becomes a set distance, and
+ * the sheet ends where its ground ends — the screen-to-paper join, no ruled
+ * edge. */
+@media (max-aspect-ratio: 5/4) {
+  .sheet { min-height: auto; }
+}
+
+/* And the ground under a sheet that has stopped filling the window, on the
+ * windows where the sheet is the whole width of it.
+ *
+ * The rule above hands back every point the content does not want, and the
+ * canvas behind it was still the paper: 114px of it under the foot at 390×844,
+ * 156px at 768×1024 — fifteen percent of the screen. Both are windows where the
+ * page does NOT scroll, which is what that rule was written to achieve, so
+ * fitting was paid for in a band of slightly wrong grey along the bottom edge.
+ * Past 1600 a band of paper reads as the desk the display lies on because the
+ * paper is also down both flanks; here there is no flank, and one edge of it
+ * alone reads as a rendering fault. Eighteen levels is the same distance that
+ * made the headline's #000 a severed descender: too near to name, too far to
+ * miss.
+ *
+ * The width term is not decoration. Squarer than 5/4 and WIDER than the cap is
+ * a window someone dragged rather than maximised — 1700×1400 on a 2560 monitor
+ * — and there the flanks exist, the sheet is an object, and the join under the
+ * foot is the same join as the two down its sides. That window keeps the paper.
+ */
+@media (max-aspect-ratio: 5/4) and (max-width: 1600px) {
+  body { background: var(--screen); }
+}
+
+/* The bar's breakpoint, and it is a fact about glyph widths rather than a
+ * taste: below this the wordmark and the formula have no room either side of
+ * a band that still has to be wide enough to hold a word. The row becomes two
+ * rows and the marks keep the line they were sitting on. */
+@media (max-width: 639px) {
+  .headline { font-size: max(var(--hero-type), 28px); }
+  .showcase {
+    margin-top: 40px;
+    gap: 32px;
+  }
+  .subhead__what { font-size: 20px; }
+  .soundtrack {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: 12px;
+  }
+  .soundtrack__toggle { justify-self: start; }
+  .soundtrack__toggle > [data-soundtrack-toggle-label] { display: none; }
+  .soundtrack__tracks { width: auto; gap: 0; }
+  .foot__bar {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'mark formula' 'band band';
+    row-gap: 12px;
+    align-items: baseline;
+  }
+  .foot__bar > .mark { grid-area: mark; height: auto; }
+  .foot__bar > .mark--formula { grid-area: formula; }
+  .bar { grid-area: band; }
+}
+
+@media (hover: none) {
+  .demo__motion { opacity: 0.8; }
+}
+
+:where(a, button):focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* ── The ink, shut — and the button in it ─────────────────────────────────── */
+
+/* The frame is the canvas's box and nothing else, so every fraction below is a
+ * fraction of the picture.
+ *
+ * `width: 100%`, never shrink-to-fit, and the scale is measured from `.bar`
+ * rather than from here: `resize()` writes the canvas's own CSS width, so a
+ * wrapper that took its width from its contents would be handing this code
+ * back its own last answer, and the band would lock at whatever it was first
+ * laid out at, on every viewport and every device pixel ratio after it. */
+.idle__frame {
+  position: relative;
+  width: 100%;
+  container-type: inline-size;
+}
+/* The aspect is the camera's — `IDLE_WINDOW` is 400 by 40 panel points — and it
+ * is only ever used for the frames before `resize()` writes the real numbers,
+ * or on a page where the module never runs at all. */
+.idle__ink {
+  display: block;
+  width: 100%;
+  aspect-ratio: 400 / 40;
+}
+
+/* The cutout, as a control.
+ *
+ * The box is the notch's core rect: panel x 227.5..412.5 of a 400-point crop
+ * that starts at 120, which is 26.875% in and 46.25% across — hanging from
+ * the display's own top edge, which sits 8 points into this 40-point crop:
+ * 20% down. The canvas clips the ink at that same edge, so the black and the
+ * button begin on one line with the housing strip above both; a button pinned
+ * to the crop's top was 8 points of black punched through the strip, ending
+ * in a flat cut at the picture's edge. The corner is the geometry's own 6
+ * points, and a container unit is what makes 6 points of a 400-point crop
+ * expressible: 1.5cqw, at every scale.
+ *
+ * Fractions rather than pixels, and no custom properties written from script:
+ * the page's only call to action must not depend on a module having run.
+ * `theButtonSitsOnTheCutout` in portcheck recomputes all four numbers from
+ * site.js and geometry.js and fails if the stylesheet drifts from them — and
+ * it reads the FIRST rule for this selector in the file, so nothing may be
+ * declared for it above this point. */
+.notch-button {
+  position: absolute;
+  top: 20%;
+  bottom: 0;
+  left: 26.875%;
+  width: 46.25%;
+  border-radius: 0 0 1.5cqw 1.5cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* The same #000 `render.js` fills the cutout with, so on the live path this
+   * double-paints an identical rect and costs nothing — and on a page whose
+   * script never arrived it is still a black button with a word in it. */
+  background: #000;
+  color: var(--paper);
+  text-decoration: none;
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  /* Tracking is added after the last glyph too, so a centred label sits half a
+   * space to the left of true centre. This puts it back. */
+  padding-left: 0.14em;
+  /* Eight characters at Martian Mono's 0.70em advance plus 0.14em of tracking
+   * is 6.58em of ink; 62% of the cutout's 46.25cqw is 28.68cqw; the quotient is
+   * this. One rule and no breakpoint — the label is the same fraction of the
+   * notch at every width the cap allows. The plain value first is what an
+   * engine without container units falls back to, and it is the size the button
+   * this replaces was set at.
+   *
+   * The cap binds above a column of about 920px, where 62% of a pill that is
+   * already 600px wide is a word competing with the headline and a retracted
+   * notch that has stopped looking retracted. Judged by looking, at 1440: 28
+   * left the word stranded in the middle of a black field, 56 shouted, 40 is a
+   * button. */
+  font-size: 12px;
+  font-size: clamp(11px, 4.358cqw, 40px);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+/* Hover is a quiet tonal change across the whole cutout. A line around the
+ * moving reservoir made the control look detached from the liquid. */
+.notch-button:hover {
+  background: var(--ink);
+}
+/* Keyboard focus inverts the whole cutout instead of drawing another contour
+ * over the ferrofluid. Forced-colors restores the system outline below. */
+.notch-button:focus-visible {
+  outline: none;
+  background: var(--paper);
+  color: var(--ink);
+}
+/* 44px of tap target without moving a painted pixel. At 320 the band is 28px
+ * tall, and the 8px this hangs over each side lands on paper inside the 12px
+ * gaps above and below it. */
+.notch-button::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 44px;
+  transform: translateY(-50%);
+}
+
+@media (forced-colors: active) {
+  .sheet { background: Canvas; }
+  /* Both hardware edges come BACK here as system ink. The normal page draws
+   * neither — it has one ground and puts the hardware in the shapes — but the
+   * shapes are canvases and film, and none of that survives forcing, so the
+   * edges are all this theme has left to say the page is a display with.
+   *
+   * They are BORDERS, never gradient hairlines: forcing sets every non-url
+   * background-image to none — gradients included, system-color stops
+   * included, inside this very block included — so a gradient line declared
+   * here never paints. Borders keep their forced ink, which is why the foot's
+   * rule below works. Each edge is a zero-height
+   * positioned rule wearing its line as border-top. */
+  .hero { background: Canvas; }
+  .hero::before, .hero::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: var(--hair) solid CanvasText;
+  }
+  .hero::before { top: var(--edge-display); }
+  .hero::after { top: var(--edge-bar); }
+  /* Forced-only: the normal theme draws no rule here, but with the band's
+   * picture hidden this row has no baseline at all without one. */
+  .foot__bar { border-bottom: var(--hair) solid CanvasText; }
+  /* Canvas pixels are not remapped, so a difference blend over them is a bet
+   * neither theme wins: the words can come back as ink on ink. All three
+   * pictures are decorative and already hidden from the accessibility tree,
+   * so they go, and the sentence they were inside is set in system ink on the
+   * system ground. The hardware edges stay, so the page is still a display.
+   *
+   * The cutout underneath went with them, which is why the button paints its
+   * own. */
+  .hero__ink, .idle__ink, .demo__film { display: none; }
+  /* Film pixels are no more remappable than canvas pixels, so the footage
+   * goes with the drawings, and the demo's slice of display collapses to the
+   * same grammar as the hero's: two hardware lines in system ink on the
+   * system ground — as borders, for the reason above. With the footage gone
+   * the bar's bottom comes back as a drawn stand-in, at the bar's real 32
+   * points into the film's 240 — the notch's own depth, over the encode's box
+   * in points. It shipped as 32/190 once: the old capture's height where the
+   * film's belongs, a line ruled 8px below any hardware in the footage, and
+   * only this theme could see it. */
+  .demo { background: Canvas; }
+  .demo::before, .demo::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: var(--hair) solid CanvasText;
+  }
+  .demo::before { top: var(--demo-house); }
+  .demo::after {
+    top: calc(var(--demo-house) + var(--hair) + var(--demo-film-h) * 32 / 240);
+  }
+  .demo__motion, .soundtrack button {
+    background: ButtonFace;
+    color: ButtonText;
+    border: 1px solid ButtonText;
+  }
+  .demo__motion { opacity: 1; }
+  .soundtrack__track[aria-checked="true"] {
+    background: Highlight;
+    color: HighlightText;
+  }
+  .soundtrack button:focus-visible { outline-color: Highlight; }
+  /* The idle band's height normally comes from its canvas, and the canvas
+   * just left: with no in-flow child the frame collapses to zero and takes
+   * the download button — top and bottom percentages of a 0-tall box — with
+   * it, leaving the page's only control invisible. The frame states the
+   * band's own 10:1 — the picture is 400 by 40 — so the button has a box to
+   * paint its ButtonFace in, and the marks beside it a row to take their
+   * height from. */
+  .idle__frame { aspect-ratio: 10 / 1; }
+  .headline { mix-blend-mode: normal; color: CanvasText; }
+  .notch-button {
+    background: ButtonFace;
+    color: ButtonText;
+    border: 1px solid ButtonText;
+  }
+  .notch-button:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  /* The split never happens under the preference — site.js does not build the
+   * type effect at all — but if it somehow has, nothing moves. */
+  .headline__letter { transform: none !important; will-change: auto; }
+  .demo__motion { display: none; }
+  .notch-button, .soundtrack button { transition: none; }
+  * { scroll-behavior: auto !important; }
+}

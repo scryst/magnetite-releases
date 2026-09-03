@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Magnetite — A ferrofluid music player for the MacBook notch</title>
+<meta name="description" content="A free, native macOS music player that turns the MacBook notch into sound-driven black ferrofluid. Audio stays on your Mac. No tracking.">
+<meta name="application-name" content="Magnetite">
+<meta name="author" content="scryst">
+<meta name="robots" content="index, follow, max-image-preview:large">
+
+<!--
+  MAGNETITE FIELD NOTES
+  01 / Fe3O4 is ferrimagnetic. The interface answers a field, too.
+  02 / The liquid is rendered from the app's own audio capture.
+       The player in the middle is the only film on this page.
+  03 / A personal project by scryst. No trackers. No frameworks.
+-->
+
+<link rel="canonical" href="https://magnetite.app/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<!-- The same mark flat, for the browsers that never promised to read the SVG
+     — which on a Mac-only product's page is Safari. The touch icon is the
+     app's own tile on the site's paper: a home-screen bookmark is an app-icon
+     surface, so it gets the app's icon rather than the tab's. -->
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- The tab colour is the strip the browser's own chrome sits against, and that
+     strip is the DISPLAY. It said paper here, under a comment describing a band
+     of paper above the display's top edge — there is no such band. The hero is
+     welded to the top edge of the sheet and the sheet's top is the window's
+     top: measured at 390, 1440, 1599, 1601, 1680 and 1920, every one of them
+     zero. What the chrome actually meets is `--screen` at both ends and the
+     mass in the middle, and on a phone — the only place this paints a solid bar
+     rather than tinting a toolbar — the sheet is the full width, so paper is
+     not on the screen at all. -->
+<meta name="theme-color" content="#D6D8DE">
+
+<!-- The share card. og.png is rendered by test/og.html using this site's own
+     renderer against the app's own captured audio, so an unfurl in Slack or
+     iMessage shows a real frame of the real fluid rather than a mock-up. -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Magnetite">
+<meta property="og:title" content="Magnetite — A ferrofluid music player for the MacBook notch">
+<meta property="og:description" content="A free, native macOS music player that turns the MacBook notch into sound-driven black ferrofluid. Audio stays on your Mac. No tracking.">
+<!-- Absolute, and it has to be: og:image is fetched by a crawler that has no
+     page to resolve a relative path against, so "og.png" unfurls as nothing. -->
+<meta property="og:url" content="https://magnetite.app/">
+<meta property="og:image" content="https://magnetite.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A band of black ferrofluid in the shape of a MacBook camera notch.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Magnetite — A ferrofluid music player for the MacBook notch">
+<meta name="twitter:description" content="A free, native macOS music player that turns the MacBook notch into sound-driven black ferrofluid. Audio stays on your Mac. No tracking.">
+<meta name="twitter:image" content="https://magnetite.app/og.png">
+<meta name="twitter:image:alt" content="A band of black ferrofluid in the shape of a MacBook camera notch.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Magnetite",
+  "url": "https://magnetite.app/",
+  "description": "A free, native macOS music player that turns the MacBook camera notch into sound-driven black ferrofluid. Audio stays on your Mac. No tracking.",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "macOS 26",
+  "softwareVersion": "0.1.0",
+  "image": "https://magnetite.app/og.png",
+  "screenshot": "https://magnetite.app/og.png",
+  "isAccessibleForFree": true,
+  "featureList": [
+    "Native notch music controls",
+    "Ferrofluid visualizer driven by system audio",
+    "Spotify and Apple Music playback",
+    "On-device audio processing with no tracking"
+  ],
+  "author": { "@type": "Person", "name": "scryst" },
+  "downloadUrl": "https://github.com/scryst/magnetite-releases/releases/tag/v0.1.0",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<link rel="preload" as="image" href="media/demo-poster.webp" type="image/webp" fetchpriority="high">
+<!-- Two local Latin subsets, pinned to the three instances the stylesheet
+     actually sets. Archivo is only ever wdth 125 / wght 900, Martian Mono only
+     ever 400. The files are the same faces the Google Fonts request returned,
+     now served first-party so the page makes no runtime request for its type.
+     A molten display face (Climate Crisis) had one commit here as the
+     headline's type and was rejected on sight; the headline is Archivo, the
+     same voice as the marks. Do not re-melt the type.
+     test/og.html still loads the exact mono weight it draws rather than this
+     page's 400. -->
+<link rel="stylesheet" href="css/type.css">
+<link rel="stylesheet" href="css/magnetite.css">
+<link rel="modulepreload" href="js/site.js">
+<link rel="modulepreload" href="js/sim.js">
+<link rel="modulepreload" href="js/render.js">
+<link rel="modulepreload" href="js/geometry.js">
+<link rel="modulepreload" href="js/inktype.js">
+<link rel="modulepreload" href="data/real-levels.js">
+<link rel="modulepreload" href="js/clock.js">
+<link rel="modulepreload" href="js/visibility.js">
+<link rel="modulepreload" href="js/bands.js">
+</head>
+<body>
+
+<!-- ══ THE SHEET IS THE DISPLAY ═════════════════════════════════════════════
+     Nothing sits above the liquid. The top edge of the page is given to the
+     hardware: a strip of housing, the display's own top edge as the join
+     where paper turns to screen, and the notch hanging off it — which is the
+     only arrangement in which a black shape with rounded corners reads as a
+     notch rather than as a banner. A notch is a bite out of an edge; the edge
+     is the meeting of the two grounds, never a ruled line.
+
+     The wordmark that used to sit up there is now in the foot, at menu-bar
+     scale, on the menu bar's own line, which is where macOS puts an app's
+     name. -->
+<main class="sheet">
+
+  <!-- ══ THE INK, OPEN ══════════════════════════════════════════════════════
+       The expanded notch, at page scale, with the headline knocked out of it.
+       The liquid is the product; the words are two of them and they live
+       inside it.
+
+       The display's edge is the section's own background — paper above,
+       screen below, BEHIND the canvas — so the liquid hangs over the join
+       and eats into the housing as it leans toward your cursor. -->
+  <section class="hero">
+    <canvas class="hero__ink" id="hero-band" aria-hidden="true"></canvas>
+    <!-- The break is set by hand. A display line this short is a typographic
+         decision, and `ch` is useless at this size. -->
+    <h1 class="headline">Music,<br>magnetized.</h1>
+    <p class="visually-hidden">
+      A reservoir of black liquid in the shape of a MacBook camera notch. It
+      rises into peaks in time with music and leans toward the pointer.
+    </p>
+  </section>
+
+  <section class="showcase" aria-label="Magnetite in action">
+    <p class="subhead">
+      <span class="subhead__what">A free, native macOS player that turns the MacBook notch into playback controls and black ferrofluid driven by system audio.</span>
+      <span class="subhead__proof">Works with Apple Music and Spotify. Audio stays on your Mac.</span>
+    </p>
+
+  <!-- The shipping app, filmed open on a MacBook. Reduce Motion holds frame 0. -->
+  <section class="demo">
+    <div class="demo__stage">
+      <video class="demo__film" id="demo-film" muted loop playsinline
+             preload="metadata" width="1536" height="720"
+             poster="media/demo-poster.webp" src="media/demo.mp4"
+             aria-hidden="true"></video>
+      <button type="button" class="demo__motion" data-demo-motion>
+        <span data-demo-motion-label>Play demo</span>
+      </button>
+    </div>
+    <p class="visually-hidden">
+      The real player, filmed open: black liquid moves with the music while a
+      track is skipped, the seek strip is scrubbed, and two-finger swipes move
+      backward and forward through the queue.
+    </p>
+    <div class="soundtrack" data-soundtrack role="group" aria-label="Page audio">
+      <audio hidden preload="none" src="media/cyberpunk-renaissance.mp3"
+             data-soundtrack-audio></audio>
+      <button type="button" class="soundtrack__toggle" data-soundtrack-toggle
+              aria-label="Play page audio" aria-pressed="false">
+        <span class="soundtrack__toggle-icon" aria-hidden="true"></span>
+        <span data-soundtrack-toggle-label>Play page audio</span>
+      </button>
+      <p class="soundtrack__now">
+        <span data-soundtrack-current>Cyberpunk Renaissance</span>
+        <span>Punch Deck · drives the ferrofluid</span>
+      </p>
+      <div class="soundtrack__tracks" role="radiogroup" aria-label="Choose a soundtrack">
+        <button type="button" class="soundtrack__track" data-soundtrack-track
+                data-title="Cyberpunk Renaissance"
+                data-src="media/cyberpunk-renaissance.mp3" role="radio"
+                aria-label="Cyberpunk Renaissance" aria-checked="true" tabindex="0">
+          <span aria-hidden="true">01</span>
+        </button>
+        <button type="button" class="soundtrack__track" data-soundtrack-track
+                data-title="Chrome Funk"
+                data-src="media/chrome-funk.mp3" role="radio"
+                aria-label="Chrome Funk" aria-checked="false" tabindex="-1">
+          <span aria-hidden="true">02</span>
+        </button>
+      </div>
+      <p class="visually-hidden" data-soundtrack-status aria-live="polite">
+        Ready · Cyberpunk Renaissance
+      </p>
+    </div>
+  </section>
+  </section>
+
+  <!-- ══ THE FOOT IS THE SAME MENU BAR, FURTHER AWAY ════════════════════════
+       One row: the app's name at the left end, the picture of the retracted
+       notch across the middle, the formula at the right end, and all three
+       seated on the band picture's own bar — the ink in the picture is the
+       baseline; no rule is drawn under the row.
+
+       The black cutout IS the link. The renderer is forbidden to draw inside
+       that rectangle, so the page keeps the app's guarantee even when it is
+       only drawing a picture of it.
+
+       The label is one word. Eighteen tracked characters do not fit a shape
+       whose aspect is 185 by 32, and the last thing to do to a call to action
+       is set it at eight pixels; the version and destination are carried in
+       the accessible name, and the system requirements are printed below.
+
+       No attribute name is spelled out in this file's comments: portcheck
+       counts them as raw strings across the whole source, so a mention here
+       would be a second button the page does not have. -->
+  <div class="foot">
+    <div class="foot__bar">
+      <p class="mark">
+        <!-- The app's own mark: the poured M, GENERATED by test/gen-mark.mjs
+             from the icon master at test/icon-1024.png — the same pixels the
+             icns and the favicon are built from. portcheck re-derives the mark
+             from those pixels and asserts that this glyph AND the favicon are
+             each what the derivation produces, so the page and the tile cannot
+             disagree about what the logo is — and neither can quietly stop
+             being the icon. Edit the master or the generator, never this path.
+
+             Cubics, and that is the point. A hand-trace of the same contour
+             stood here in seventy straight segments and every joint in it was
+             visible at this size: the drops came out faceted and the shoulders
+             had corners on them. Inline so it prints in the page's ink. A
+             hand-drawn notch-with-a-drop stood here for one commit and was
+             rejected; the logo is the icon's, not a second invention. Hidden
+             from the tree: the name beside it is the text. -->
+        <svg class="mark__glyph" viewBox="181 282 660 458" aria-hidden="true">
+          <path fill="currentColor" d="M272.5 283C278.4 281.8 285.4 283.9 291 285.8C305 290.5 317.3 301.7 328 311.6
+            C331.4 314.7 334.4 318.4 338 321.3C344.1 326.3 349.4 332 355 337.5
+            C356.9 339.3 359.1 340.8 361 342.6C365.7 346.9 369.9 351.6 374.5 356
+            C376.4 357.8 378.6 359.2 380.5 361C399.2 379 417.9 397 437 414.6
+            C443.1 420.2 448.6 426.4 455 431.7C457.9 434 460.3 436.9 463 439.4
+            C475.2 450.7 487.3 460.7 504 464.1C507.8 464.9 512.1 464.6 516 464.5
+            C533.5 463.7 547.8 450.6 560 439.4C562.7 436.9 565.1 434 568 431.7
+            C574.4 426.4 579.9 420.2 586 414.6C598.7 402.9 611.1 390.9 623.5 379
+            C625.4 377.2 627.6 375.8 629.5 374C646.5 357.7 663.5 341.3 680.5 325
+            C682.7 322.9 685.3 321.2 687.5 319C691 315.5 694.7 312.3 698.4 309
+            C715.5 293.9 737.5 275.8 762 285.7C765.1 287 768.3 288.6 771 290.7
+            C784.7 301.3 789.9 318.4 791.4 335C791.8 339.3 791.3 343.7 791.5 348
+            C791.6 350.4 792.4 352.6 792.5 355C793 367 792.5 379 792.5 391
+            C792.5 414.7 792.5 438.3 792.5 462C792.5 477.9 790.6 494.7 795.5 510
+            C798.6 519.7 804.6 528.2 810 536.8C816.7 547.3 823.2 558.4 827.7 570
+            C844.4 613.6 850.7 672.7 816.4 710C808.9 718.2 800.6 724.4 791 729.9
+            C782.6 734.6 772.6 737.9 763 739.3C721.7 745.5 681.1 721.5 665.3 683
+            C658.3 665.7 656.7 646.5 657.5 628C658 617.3 660.5 606.3 663.1 596
+            C666.1 584.1 669.4 572.1 674.8 561C681.2 547.7 690 535.8 697.3 523
+            C705.2 509.2 707.3 492.6 704.7 477C703.4 469.1 700.7 460.8 694 455.7
+            C687.6 450.9 679.8 452.6 673 455.6C659.6 461.5 648.2 473.3 638 483.5
+            C635.1 486.4 632 488.8 629 491.6C617.1 502.5 601.1 518 591.9 531
+            C573.9 556.4 563.2 587.7 531 598.8C525.9 600.6 520.4 601.9 515 602.4
+            C509.3 602.9 503.5 602 498 600.6C493.4 599.5 489.2 597.8 485 595.7
+            C457.3 582 447.9 554.7 431.1 531C421.9 518 405.9 502.5 394 491.6
+            C391.4 489.1 388.5 487 386 484.5C376.4 474.9 366.3 464.9 354.5 458
+            C349.3 455 343.2 452 337 452.6C328.2 453.4 322.8 461.3 320.2 469
+            C315.2 483.3 316.6 502.2 322.3 516C328 529.9 338.2 541.6 345 555
+            C356.2 577.3 363.2 602.2 365.4 627C369.1 667.6 352.6 710.9 315 730.2
+            C306.5 734.6 296.5 737.9 287 739.3C285 739.6 283 739.4 281 739.7
+            C269.2 741.5 256.3 739.5 245 735.5C236.5 732.4 228.1 728.4 220.8 723
+            C196.4 704.9 182.9 675.1 181.5 645C181.3 639.5 182.2 634.4 182.5 629
+            C183.3 608.9 188.1 587.7 195.7 569C200.3 557.8 206.5 547 213 536.8
+            C219 527.4 225.6 518 228.4 507C231.4 495.2 230.5 483.1 230.5 471
+            C230.5 453 230.5 435 230.5 417C230.5 396.4 229.6 375.6 230.5 355
+            C230.6 352.6 231.4 350.4 231.5 348C231.7 343.7 231.2 339.3 231.6 335
+            C233.2 317.7 239.6 296.9 256 287.9C261.4 285 266.6 284.2 272.5 283Z"/>
+        </svg>
+        MAGNETITE
+      </p>
+      <div class="bar">
+        <div class="idle__frame">
+          <canvas class="idle__ink" id="idle-band" aria-hidden="true"></canvas>
+          <a class="notch-button" href="https://github.com/scryst/magnetite-releases/releases/tag/v0.1.0"
+             data-download rel="external" aria-describedby="requires first-launch">
+            Download<span class="visually-hidden">, Magnetite v0.1.0 on GitHub</span>
+          </a>
+        </div>
+        <p class="visually-hidden">
+          The same liquid retracted into the menu-bar band, where it stays
+          within the shape of the notch. Its cutout is the download.
+        </p>
+      </div>
+      <p class="mark mark--formula">FE<sub>3</sub>O<sub>4</sub></p>
+    </div>
+    <div class="foot__note">
+      <p class="note note--lede">Idle, it never leaves the menu bar.</p>
+      <p class="note" data-requires id="requires">macOS 26&nbsp;· Apple silicon&nbsp;· Free&nbsp;· 564 KB</p>
+      <!-- Only while the served zip is unnotarised. portcheck reads the zip for
+           the stapled ticket and requires this paragraph to exist exactly when
+           the Gatekeeper dialog will appear — and to be gone the moment a
+           notarised build lands, when it would read as a warning about a
+           dialog nobody sees. -->
+      <p class="note" data-firstlaunch id="first-launch">
+        First launch: macOS blocks builds it has not notarised. Approve it once
+        under System Settings › Privacy &amp; Security › Open Anyway.
+      </p>
+      <p class="demo__credit">
+        Film and soundtrack:
+        <a href="https://punchdeck.bandcamp.com" rel="external">Punch Deck</a>&nbsp;—
+        <a href="https://punchdeck.bandcamp.com/track/cyberpunk-renaissance"
+           rel="external">“Cyberpunk Renaissance”</a> and
+        <a href="https://punchdeck.bandcamp.com/track/chrome-funk"
+           rel="external">“Chrome Funk”</a>&nbsp;—
+        <a href="https://creativecommons.org/licenses/by/4.0/" rel="external">CC BY 4.0</a>.
+      </p>
+      <!-- Who is handing you this binary, and where to write when it breaks.
+           The zip carries the full terms in Resources/LICENSE. -->
+      <p class="note">
+        © 2026 scryst&nbsp;·
+        <a href="mailto:scrystyt@gmail.com">scrystyt@gmail.com</a>&nbsp;·
+        <a href="privacy.html">privacy</a>&nbsp;·
+        <a href="terms.html">terms</a>
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<script type="module" src="js/site.js"></script>
+<script type="module" src="js/webmcp.mjs"></script>
+</body>
+</html>
