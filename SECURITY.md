@@ -8,7 +8,7 @@ version, and reproducible steps. Do not include passwords, access tokens, or
 other secrets.
 
 For ordinary bugs and product feedback, use the public
-[issue tracker](https://github.com/scryst/magnetite-releases/issues).
+[issue tracker](https://github.com/scryst/magnetite/issues).
 
 Official binaries and checksum files are published only through this
 repository's [Releases](https://github.com/scryst/magnetite-releases/releases).
