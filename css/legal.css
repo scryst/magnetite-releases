@@ -1,0 +1,82 @@
+/* The legal pages: the product page's black and faces, set as plain reading. */
+
+:root {
+  color-scheme: dark;
+  --paper: #000;
+  --ink: #F2F0EB;
+  --ink-soft: #A3A09A;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font: 400 17px/1.6 -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+
+.legal {
+  width: min(calc(100% - 48px), 35em);
+  margin-inline: auto;
+  padding-block: clamp(48px, 10vw, 120px) 96px;
+}
+
+.legal a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font: 600 clamp(44px, 9vw, 80px)/1 'Geist', -apple-system, system-ui, sans-serif;
+  letter-spacing: -0.045em;
+}
+
+h2 {
+  margin: 40px 0 8px;
+  font-size: 17px;
+  font-weight: 650;
+}
+
+p, ul { margin: 0 0 18px; }
+ul { padding-left: 1.4em; }
+code {
+  font: 0.88em/1 ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace;
+  overflow-wrap: anywhere;
+}
+
+.legal__date { margin-bottom: 40px; color: var(--ink-soft); font-size: 15px; }
+.legal__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin-top: 56px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .legal { width: min(calc(100% - 32px), 35em); padding-top: 40px; }
+}
+
+@media (forced-colors: active) {
+  html { background: Canvas; color: CanvasText; }
+  .legal__date, .legal__foot { color: CanvasText; }
+}
+
+/* The way home, under the product's own name. */
+.legal__home {
+  display: inline-flex; align-items: center; gap: 10px;
+  min-height: 44px; margin-bottom: clamp(24px, 6vw, 56px);
+  font: 600 19px/1 'Geist', -apple-system, system-ui, sans-serif;
+  letter-spacing: -0.02em; text-decoration: none;
+}
+.legal__home img { border-radius: 5px; }

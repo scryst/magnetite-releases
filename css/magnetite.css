@@ -1,0 +1,642 @@
+/* Magnetite — night set.
+ *
+ * The page is the notch's own black. A drawn MacBook carries the screen
+ * recording of the running app, and scrolling pushes the camera into its notch
+ * until the recording hangs from the top of the window. The liquid in the film
+ * is the only thing that moves on its own; everything else answers a scroll.
+ * The page has no color of its own; the only color is the recording's, and
+ * the light behind the MacBook is baked from its frames. Geist is the display face;
+ * the rest is the Mac's own face.
+ */
+
+:root {
+  color-scheme: dark;
+  --bg: #000;
+  --ink: #F2F0EB;
+  --ink-soft: #A3A09A;
+  --line: rgb(242 240 235 / 0.28);
+
+  --display: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+  --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace;
+
+  --gutter: 20px;
+  /* The film's width, and the column everything below it keeps. */
+  --col: calc(100vw - 2 * var(--gutter));
+  --film: 100vw;
+  --gap: clamp(88px, 12vw, 168px);
+
+  /* Liquid timing (PRODUCT.md): out quickly, drain eased, never bounce. */
+  --pour: 140ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  --drain: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (min-width: 900px) {
+  :root { --gutter: 32px; --film: min(1040px, 100vw - 400px); --col: var(--film); }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+/* No rubber band: pulled past the top, the light behind the MacBook would end
+   at a hard edge over the page's black. */
+html { -webkit-text-size-adjust: 100%; background: var(--bg); scroll-behavior: smooth; overscroll-behavior-y: none; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 17px/1.55 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+a { color: inherit; text-underline-offset: 3px; text-decoration-color: var(--line); transition: text-decoration-color var(--drain); }
+a:hover { text-decoration-color: currentColor; transition-duration: 140ms; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
+img, video { display: block; max-width: 100%; }
+/* The lights spill past the window's sides. Clipped here, not on body: body's
+   overflow passes to the viewport, and a phone then widens the page to fit. */
+main { overflow-x: clip; }
+b { font-weight: 600; }
+
+.skip-link {
+  position: fixed; top: 12px; left: 12px; z-index: 100;
+  padding: 12px 18px; border-radius: 12px;
+  background: var(--ink); color: var(--bg);
+  transform: translateY(-300%);
+}
+.skip-link:focus { transform: none; }
+
+/* The name, top left. It scrolls away on a phone, where the film fills the
+   window's width; from 900 px it stays, beside the film like a menu-bar item. */
+.masthead { position: absolute; top: 0; left: 0; z-index: 20; padding: 16px var(--gutter); }
+.brand {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 44px;
+  color: var(--ink); text-decoration: none;
+  font: 600 20px/1 var(--display); letter-spacing: -0.025em;
+}
+.brand__mark { width: 28px; height: 20px; }
+@media (min-width: 900px) { .masthead { position: fixed; padding-top: 20px; } }
+
+/* The symbol sheet the mark is drawn from takes no room. */
+.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Buttons: one solid pill for the download, outlined for the soundtrack. */
+.button {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; padding: 0 24px; border-radius: 999px;
+  background: var(--ink); color: var(--bg);
+  font: 600 16px/1 var(--sans); text-decoration: none; white-space: nowrap;
+  transition: background-color var(--drain), transform var(--drain);
+}
+.button:hover { background: #fff; transition-duration: 140ms; }
+.button:active { transform: scale(0.97); transition: transform var(--pour); }
+.button--big { min-height: 56px; padding: 0 30px; font-size: 18px; }
+
+/* The journey. Without scroll timelines, or under Reduce Motion, it is a still
+   page: the pitch, the MacBook, the three gestures and the film's controls. */
+.journey__pin {
+  position: relative;
+  display: grid; gap: 40px;
+  width: var(--col); margin: 0 auto; padding-top: 96px;
+}
+.pitch { max-width: 560px; }
+.hero__title {
+  margin: 0; max-width: 12ch;
+  font: 600 clamp(42px, 5.6vw, 84px)/0.96 var(--display);
+  letter-spacing: -0.05em; text-wrap: balance;
+}
+.pitch__lede { margin: 16px 0 0; max-width: 32ch; color: var(--ink-soft); font-size: clamp(16px, 1.5vw, 20px); line-height: 1.45; }
+.pitch__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: 24px; }
+.pitch__meta { margin: 14px 0 0; color: var(--ink-soft); font-size: 14px; }
+.pitch__meta a { position: relative; }
+.pitch__meta a::after { content: ''; position: absolute; inset: -12px 0; }
+
+/* The light behind the MacBook: the panel's color for the song on its screen,
+   one baked still per song (test/bake-glow.py) that site.js draws into one
+   small canvas, faded through its round mask. Still, it sits behind the
+   MacBook's place in the grid. */
+.glow { position: absolute; grid-area: 2 / 1; inset: -30% -25%; pointer-events: none; }
+.glow canvas, .mac__wall canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.journey__pin > .mac { grid-area: 2 / 1; }
+
+/* Film grain over the whole page, so the black reads as a print, not a void.
+   It is one still tile; nothing in it moves. */
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 50; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 220px 220px;
+  opacity: 0.09;
+}
+
+/* The MacBook Pro 14-inch (M5), from Apple's own numbers: the lid is 312.6 mm
+   wide and the screen 302.5 × 196.4 mm (3024 × 1964 pixels), so the glass border
+   is 3.5 mm inside a thin aluminum edge. The notch is 185 × 32 of the screen's
+   1512 × 982 points, with 9-point corners. The base is 221.2 mm deep and 10.5 mm
+   thick at the front. The deck's parts are measured off Apple's top-down store
+   photo of the 14-inch (the body is 1298 px there): grilles 4.4 wide and 33.9
+   tall, the keys in a black well 89.4 × 36.2, the trackpad 41.4 × 25.9, the
+   front scoop 17 wide. Lengths are in cqw, hundredths of the lid, so it is to
+   scale at any size. It is built in 3D: front on and without a camera (Reduce
+   Motion), the deck is edge-on and only the lid and the base's front show.
+   The recording is 400 × 256 points from the top of the screen, centered,
+   so its notch lands exactly on the drawn one. */
+.mac {
+  /* A grayscale riso print: one light ink, shaded only by the size of its
+     halftone dots, with the speckled dropout of a drum print. The recording
+     on the screen is the one thing not printed. */
+  --ink: #c4c4c4; --dot: max(0.72cqw, 2.6px);
+  --grit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3.4 0 0 0 -1.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") 0 0 / 180px 180px;
+  --ht-10: radial-gradient(circle, var(--ink) calc(var(--dot) * .10), transparent calc(var(--dot) * .10 + .6px)) 0 0 / var(--dot) var(--dot);
+  --ht-14: radial-gradient(circle, var(--ink) calc(var(--dot) * .14), transparent calc(var(--dot) * .14 + .6px)) 0 0 / var(--dot) var(--dot);
+  --ht-22: radial-gradient(circle, var(--ink) calc(var(--dot) * .22), transparent calc(var(--dot) * .22 + .6px)) 0 0 / var(--dot) var(--dot);
+  --ht-28: radial-gradient(circle, var(--ink) calc(var(--dot) * .28), transparent calc(var(--dot) * .28 + .6px)) 0 0 / var(--dot) var(--dot);
+  --ht-36: radial-gradient(circle, var(--ink) calc(var(--dot) * .36), transparent calc(var(--dot) * .36 + .6px)) 0 0 / var(--dot) var(--dot);
+  --ht-42: radial-gradient(circle, var(--ink) calc(var(--dot) * .42), transparent calc(var(--dot) * .42 + .6px)) 0 0 / var(--dot) var(--dot);
+  --deep: 70.76cqw; --thick: 3.35cqw; --lidt: 1.5cqw;
+  position: relative; width: min(100%, 880px); margin: 0 auto 4cqw;
+  container-type: inline-size; transform-style: preserve-3d;
+}
+.mac__lid {
+  position: relative; transform-style: preserve-3d; transform-origin: 50% 100%;
+  padding: 1.615cqw 1.615cqw 3.8cqw;
+  border-radius: 2.25cqw 2.25cqw 0.8cqw 0.8cqw;
+  background: #000;
+}
+/* The lid's metal rim, a pixel above its face like the screen, so the camera
+   fades it out without the lid being drawn again on every frame. */
+.mac__lid::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 0.4cqw #8a8a8a, inset 0 0 0 calc(0.4cqw + 1px) #000;
+  transform: translateZ(1px);
+}
+.mac__edge, .mac__back, .mac__base > * { position: absolute; }
+.mac__edge--top {
+  left: 2cqw; right: 2cqw; top: calc(var(--lidt) * -1); height: var(--lidt);
+  transform-origin: 50% 100%; transform: rotateX(90deg);
+  background: var(--ink); mask: var(--grit);
+}
+.mac__edge--left, .mac__edge--right { top: 2cqw; bottom: 0.6cqw; width: var(--lidt); background: var(--ht-28); mask: var(--grit); }
+.mac__edge--left { left: calc(var(--lidt) * -1); transform-origin: 100% 50%; transform: rotateY(-90deg); }
+.mac__edge--right { left: 100%; transform-origin: 0 50%; transform: rotateY(90deg); }
+.mac__back {
+  inset: 0; border-radius: inherit; background: #000;
+  transform: translateZ(calc(var(--lidt) * -1)) rotateY(180deg);
+}
+.mac__screen {
+  position: relative; overflow: hidden;
+  aspect-ratio: 1512 / 982;
+  border-radius: 0.64cqw 0.64cqw 0 0;
+  background: #000;
+  /* A pixel above the lid's face. In the same plane, Chrome orders the screen and
+     the lid by rounding noise, and at some scroll positions half the screen goes
+     behind the lid's black for a frame. */
+  transform: translateZ(1px);
+}
+/* The desktop: the song's cover, as the app's expanded card draws it, a field of
+   the sleeve's own colors (test/bake-glow.py) that never holds still. site.js
+   turns two copies against each other at unrelated rates while the whole
+   swells, so the colors keep folding through each other like ink in water, and
+   draws them at the stills' own size, 160 px, into one canvas the screen
+   stretches. As the page's own layers, turning and wider than the screen, the
+   copies and the lights came to 360 MB on a phone (412 wide), past what Android
+   Chrome keeps drawn: it dropped their tiles mid-scroll, blocks of the screen
+   and the light blinking out (10-30). Dark under the menu bar, so the
+   recording's panel stays the brightest thing up there. */
+.mac__wall { position: absolute; inset: 0; pointer-events: none; background: #000; }
+.mac__wall::after { content: ''; position: absolute; inset: 0; background: linear-gradient(#000 9%, rgba(0, 0, 0, 0.6) 24%, rgba(0, 0, 0, 0.1) 58%, transparent 80%); }
+/* lighten: the recording's black is the bare screen, so the desktop shows through it. */
+.mac__film { position: absolute; top: 0; left: 36.772%; width: 26.455%; height: auto; background: #000; mix-blend-mode: lighten; }
+.mac__notch {
+  position: absolute; top: 0; left: 43.88%; width: 12.24%; height: 3.26%;
+  border-radius: 0 0 0.58cqw 0.58cqw;
+  background: #000;
+}
+/* The base hangs from the hinge line: the deck lies flat toward the viewer,
+   the sides and the front edge drop the base's thickness below it. */
+.mac__base { position: absolute; left: 0; right: 0; top: 100%; height: 0; transform-style: preserve-3d; }
+.mac__deck {
+  left: 0; top: 0; width: 100cqw; height: var(--deep);
+  /* A pixel above the faces it meets: sharing their edge exactly, Chrome drops
+     part of the front edge while the camera turns. */
+  transform-origin: 50% 0; transform: rotateX(90deg) translateZ(1px);
+  border-radius: 1.6cqw;
+  background: var(--ht-36); mask: var(--grit);
+  display: grid; grid-template-columns: 4.4cqw 89.4cqw 4.4cqw; column-gap: 0.3cqw;
+  justify-content: center; align-content: start; padding-top: 5.55cqw;
+}
+.mac__grille {
+  margin-top: 1.3cqw; height: 33.9cqw;
+  background: var(--ht-10), #000;
+}
+.mac__keys {
+  display: grid; grid-auto-rows: 5.08cqw; row-gap: 0.93cqw;
+  padding: 0.46cqw 1.05cqw 0.6cqw; border-radius: 1.2cqw; background: #000;
+}
+.mac__keys div { display: flex; gap: 0.92cqw; }
+/* A key n units wide also spans the n - 1 gaps it covers, as on the real board. */
+.mac__keys i {
+  --u: 1; flex: var(--u) var(--u) calc((var(--u) - 1) * 0.92cqw); border-radius: 0.55cqw;
+  background: var(--ht-10), #000;
+}
+.mac__keys .k125 { --u: 1.25; } .mac__keys .k15 { --u: 1.5; }
+.mac__keys .k175 { --u: 1.75; } .mac__keys .k225 { --u: 2.25; }
+.mac__keys .k5 { --u: 5; }
+.mac__keys .kud { background: linear-gradient(transparent 44%, #000 44% 56%, transparent 56%), var(--ht-10), #000; }
+.mac__pad {
+  grid-column: 1 / -1; justify-self: center; margin-top: 1.45cqw;
+  width: 41.4cqw; height: 25.9cqw; border-radius: 1.2cqw;
+  background: var(--ht-22), #000;
+  box-shadow: inset 0 0 0 0.15cqw var(--ink);
+}
+.mac__side { top: 0; width: var(--deep); height: var(--thick); background: var(--ht-14); mask: var(--grit); }
+.mac__side--left { left: 0; transform-origin: 0 50%; transform: rotateY(-90deg); }
+.mac__side--right { right: 0; transform-origin: 100% 50%; transform: rotateY(90deg); }
+/* The front edge, with the scoop that lifts the lid and two of the four feet. */
+.mac__front {
+  left: 0; top: 0; width: 100cqw; height: var(--thick);
+  transform: translateZ(var(--deep));
+  border-radius: 0.3cqw 0.3cqw 1.6cqw 1.6cqw;
+  background: var(--ht-22); mask: var(--grit);
+  box-shadow: inset 0 0.25cqw 0 var(--ink);
+}
+.mac__front::before {
+  content: ''; position: absolute; top: 0; left: 41.5cqw; width: 17cqw; height: 1.3cqw;
+  border-radius: 0 0 1cqw 1cqw / 0 0 1.3cqw 1.3cqw;
+  background: #000;
+}
+.mac__front::after {
+  content: ''; position: absolute; top: 100%; left: 5.6cqw; right: 5.6cqw; height: 0.4cqw;
+  background: linear-gradient(to right, #111113 0 6.5cqw, transparent 6.5cqw calc(100% - 6.5cqw), #111113 0);
+}
+
+/* Three gestures, the same weight: none of them is the main one. */
+.moves { list-style: none; margin: 0; padding: 0; display: grid; gap: 20px; }
+.moves li { color: var(--ink-soft); font: 500 clamp(22px, 2.4vw, 32px)/1.15 var(--display); letter-spacing: -0.03em; }
+.moves b { color: var(--ink); font-weight: 600; }
+@media (min-width: 720px) { .moves { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; } }
+
+.stage__foot { display: flex; align-items: center; gap: 8px; }
+.sound {
+  display: inline-flex; align-items: center; gap: 9px;
+  min-height: 44px; padding: 0 18px 0 15px; border-radius: 999px;
+  border: 1.5px solid var(--line); background: #000; color: var(--ink);
+  font: 600 15px/1 var(--sans); cursor: pointer;
+  transition: border-color var(--drain), background-color var(--drain), color var(--drain);
+}
+.sound svg { width: 16px; height: 16px; fill: currentColor; }
+.sound:hover { border-color: var(--ink); transition-duration: 140ms; }
+.sound[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.quiet {
+  min-height: 44px; padding: 0 12px; border: 0; border-radius: 999px; background: none;
+  color: var(--ink-soft); font: 500 15px/1 var(--sans); cursor: pointer;
+  transition: color var(--drain);
+}
+.quiet:hover { color: var(--ink); transition-duration: 140ms; }
+
+/* The camera. The section is the scroll it takes; its pin holds the window.
+   The MacBook is laid out at the size where its recording is the film's width
+   with the notch at the top of the window, and starts scaled down to fit beside
+   the pitch (under it on a phone). Scrolling eases it up to full size about the
+   notch while the pitch lifts away, then names the gestures one at a time. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .journey {
+      /* Pushed in, the film, the gesture under it and the film's controls are
+         one group, centered in the window: --stack is what sits under the
+         film, and the film gives up width before the group leaves the window. */
+      --stack: 180px;
+      --fh: min(var(--film) / 1.5625, 100svh - var(--stack) - 80px);
+      --fw: calc(var(--fh) * 1.5625);
+      --top: calc((100svh - var(--fh) - var(--stack)) / 2);
+      --macw: calc(var(--fw) * 1.9531);
+      /* The take is 400 points, so on this lid it is half the film's width;
+         the camera ends --zoom times closer than the lid's own size, which
+         costs nothing to draw where a lid twice as large halved the frame rate. */
+      --zoom: 2;
+      --s0: 0.32;
+      --w0: calc(var(--macw) * var(--s0));
+      --x0: calc(var(--w0) * 0.057);
+      --y0: calc(76px + var(--w0) * 0.02);
+      /* The camera dollies in from --z0 rather than scaling the picture, its
+         eye on the notch the whole way, so the deck is seen from above and
+         nothing shears. The MacBook starts turned and its lid tipped back. */
+      --p: calc(var(--macw) * 2.4);
+      --z0: calc(var(--p) * (1 - 1 / var(--s0)));
+      --rx0: 10deg; --ry0: -20deg; --lid0: 14deg;
+      height: 340svh;
+      view-timeline: --journey block;
+    }
+    .journey__pin {
+      position: sticky; top: 0;
+      display: block; width: auto; height: 100svh; margin: 0; padding: 0;
+      overflow: clip;
+    }
+    /* Pushed in, the screen's light falls to the page's black toward the floor:
+       the gesture reads on black, and the pin leaves no edge as the page moves on. */
+    .journey__pin::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(transparent 52%, rgb(0 0 0 / 0.7) 72%, #000 94%);
+      animation: dusk linear both;
+      animation-timeline: --journey;
+      animation-range: contain 22.5% contain 36%;
+    }
+    .pitch, .moves, .stage__foot { z-index: 1; }
+    .mac {
+      position: absolute; top: var(--top); left: 50%;
+      width: var(--macw); max-width: none;
+      margin: calc(var(--macw) * -0.01615) 0 0 calc(var(--macw) / -2);
+      transform-origin: 50% calc(var(--macw) * 0.01615);
+      animation: push ease-in-out both;
+      animation-timeline: --journey;
+      animation-range: contain 0% contain 39%;
+    }
+    /* The light is behind the MacBook while it is an object in the room, and
+       goes out as the camera reaches its screen, where the film's own black
+       has to meet the page's. */
+    .glow {
+      inset: auto; left: calc(50% + var(--x0)); top: calc(var(--y0) + var(--w0) * 0.36);
+      width: calc(var(--w0) * 3); height: calc(var(--w0) * 2.1);
+      translate: -50% -50%;
+      animation: glow-out linear both, gone linear both;
+      animation-timeline: --journey;
+      animation-range: contain 4.5% contain 22.5%;
+    }
+    /* Close up, the desktop's colors drain to gray, so the player is the one
+       color in the window. */
+    .mac__wall {
+      animation: gray linear both;
+      animation-timeline: --journey;
+      animation-range: contain 6% contain 30%;
+    }
+    /* Once the camera faces the screen, the base falls away into the dark. */
+    .mac__base > * {
+      animation: fade linear both, soften linear both, gone linear both;
+      animation-timeline: --journey;
+      animation-range: contain 21% contain 34.5%, contain 6% contain 22%, contain 21% contain 34.5%;
+    }
+    /* The lid's metal rim and edges go first, before the camera brings its
+       top edge into the margin over the film, and so on a tall phone no chin
+       is left floating under the screen. */
+    .mac__edge, .mac__lid::after {
+      animation: fade linear both, gone linear both;
+      animation-timeline: --journey;
+      animation-range: contain 13.5% contain 24%;
+    }
+    .mac__lid {
+      animation: hinge ease-in-out both;
+      animation-timeline: --journey;
+      animation-range: contain 0% contain 30%;
+    }
+    .pitch {
+      position: absolute; left: var(--gutter); right: var(--gutter);
+      top: calc(var(--y0) + var(--w0) + 16px);
+      /* Hidden only while the camera holds the window, so past the journey the
+         headline and its button are back for the keyboard and screen readers.
+         One animation does both: two on the same properties can't be composited
+         together, and the headline trailed the camera. */
+      animation: pitch linear both, gone linear both, seen linear forwards;
+      animation-timeline: --journey;
+      animation-range: contain 0% exit 100%, contain 0% contain 13.5%, exit 99% exit 100%;
+    }
+    .moves {
+      position: absolute; left: 50%; width: var(--col); margin-left: calc(var(--col) / -2);
+      top: calc(var(--top) + var(--fh) + 40px);
+      display: block; text-align: center;
+    }
+    .moves li {
+      position: absolute; inset: 0 0 auto; max-width: none;
+      font-size: clamp(30px, 4.2vw, 56px); color: var(--ink-soft);
+      animation: say linear both, said linear both;
+      animation-timeline: --journey;
+    }
+    /* They take turns: each has gone before the next comes, never two at once. */
+    .moves li:nth-child(1) { animation-range: contain 37.5% contain 60%; }
+    .moves li:nth-child(2) { animation-range: contain 60% contain 82%; }
+    .moves li:nth-child(3) { animation: say-last linear both, seen linear both; animation-timeline: --journey; animation-range: contain 82% contain 96%; }
+    /* The film's controls close the group, and come in with the film. */
+    .stage__foot {
+      position: absolute; left: var(--gutter); right: var(--gutter); bottom: var(--top);
+      justify-content: center;
+      animation: lift linear both reverse, gone linear both reverse;
+      animation-timeline: --journey;
+      animation-range: contain 36% contain 42%;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
+    .journey {
+      --s0: 0.31; --rx0: 16deg; --ry0: -22deg;
+      --x0: calc(50vw - var(--gutter) - var(--w0) * 0.597);
+      --y0: calc(50svh - var(--w0) * 0.445);
+    }
+    .pitch { top: 50%; right: auto; width: min(40vw, 600px); translate: 0 -50%; }
+    /* Each gesture on one line across the window, not wrapped to the film's
+       width: --stack holds one line. */
+    .moves { left: var(--gutter); right: var(--gutter); width: auto; margin-left: 0; }
+    .moves li { font-size: clamp(30px, min(4.2vw, 6.4svh), 56px); text-wrap: balance; }
+  }
+  @media (prefers-reduced-motion: no-preference) and (min-width: 900px) and (max-height: 760px) {
+    .journey { --s0: 0.27; }
+  }
+}
+/* The camera's eye is in the MacBook's own transform, on the notch the whole way,
+   so the MacBook is always looked at square on. The eye was the pin's
+   perspective-origin, which a phone animates on the page's thread: behind the
+   camera's move whenever that thread was busy, and the MacBook jumped. */
+@keyframes push {
+  from {
+    transform: translate(var(--x0), calc(var(--y0) - var(--top))) perspective(var(--p))
+      translateZ(var(--z0)) rotateX(calc(var(--rx0) * -1)) rotateY(var(--ry0));
+  }
+  /* A dolly, not a scale: perspective p / (p - z) is --zoom. */
+  to {
+    transform: translate(0, 0) perspective(var(--p))
+      translateZ(calc(var(--p) * (1 - 1 / var(--zoom)))) rotateX(0deg) rotateY(0deg);
+  }
+}
+/* Every move on the journey is opacity, transform or filter, which the phone's
+   compositor draws in step with the scroll. Visibility can't be: a keyframe with
+   it moves the whole animation to the page's thread, and on a phone the words
+   showed a whole range behind the camera (10-30). So what hides is hidden by its
+   own animation, which only flips at the end of the range, where it is already
+   out of sight. */
+@keyframes gone {
+  to { visibility: hidden; }
+}
+@keyframes seen {
+  from { visibility: hidden; }
+  to { visibility: visible; }
+}
+@keyframes said {
+  0%, 100% { visibility: hidden; }
+  50% { visibility: visible; }
+}
+@keyframes glow-out {
+  to { opacity: 0; transform: scale(1.5); }
+}
+/* Both filters are on from the top of the journey, at zero: a filter that starts
+   partway down changes how a phone builds the layer, and it redraws it mid-scroll. */
+@keyframes gray {
+  from { filter: grayscale(0); }
+  to { filter: grayscale(1); }
+}
+@keyframes fade {
+  to { opacity: 0; }
+}
+/* The deck's halftone is finer than the pixels it lands on once the camera sees
+   it edge-on, and the compositor samples without mipmaps, so it would crawl as
+   moire. Blurring the print first, as the deck foreshortens, leaves its tone. */
+@keyframes soften {
+  from { filter: blur(0); }
+  to { filter: blur(3px); }
+}
+@keyframes dusk {
+  from { opacity: 0; }
+}
+@keyframes hinge {
+  from { transform: rotateX(var(--lid0)); }
+  to { transform: none; }
+}
+@keyframes lift {
+  to { opacity: 0; transform: translateY(-24px); }
+}
+@keyframes pitch {
+  contain 13.5%, exit 99% { opacity: 0; transform: translateY(-24px); }
+}
+@keyframes say {
+  0% { opacity: 0; transform: translateY(16px); }
+  25%, 75% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(-16px); }
+}
+@keyframes say-last {
+  0% { opacity: 0; transform: translateY(16px); }
+  40%, 100% { opacity: 1; transform: none; }
+}
+
+/* What's in it, filmed: the liquid up close, two clips and the four colors, each a stage of its own
+   with the line that names it over the clip that shows it, then the rest in the
+   gestures' voice. The clips are the recording's own black, so they sit on the
+   page as screens, with their light around them. */
+.tour { width: var(--col); margin: var(--gap) auto 0; display: grid; gap: clamp(120px, 15vw, 200px); }
+.shot { margin: 0; display: grid; justify-items: center; text-align: center; }
+.shot figcaption { color: var(--ink-soft); font-size: clamp(17px, 1.5vw, 19px); }
+.shot figcaption b {
+  display: block; margin-bottom: 18px;
+  color: var(--ink); font: 600 clamp(40px, 5.6vw, 76px)/1 var(--display); letter-spacing: -0.05em; text-wrap: balance;
+}
+.shot figcaption span { display: block; max-width: 44ch; margin: 0 auto; text-wrap: balance; }
+.shot__media, .tints { width: 100%; margin-top: clamp(40px, 5vw, 64px); }
+.shot__media { position: relative; isolation: isolate; }
+.shot--liquid .shot__media { max-width: 880px; }
+.shot--lyrics .shot__media { max-width: 720px; }
+.shot--closed .shot__media { max-width: 640px; }
+.shot__media::before {
+  content: ''; position: absolute; inset: -28% -18%; z-index: -1; pointer-events: none;
+  background: 0 0 / 100% 100% no-repeat;
+  /* The glows are opaque color; their round falloff is the hero's shared mask. */
+  -webkit-mask: url(../media/glow-mask.webp) 0 0 / 100% 100% no-repeat;
+  mask: url(../media/glow-mask.webp) 0 0 / 100% 100% no-repeat;
+}
+.shot__media--pop::before { background-image: url(../media/glow-pop.webp); inset: -70% -12%; }
+.shot__media--hush::before { background-image: url(../media/glow-hush.webp); }
+.shot__media--artdeco::before { background-image: url(../media/glow-artdeco.webp); inset: -160% -12%; }
+.shot video { width: 100%; height: auto; border-radius: 18px; background: #000; box-shadow: 0 0 0 1px rgb(242 240 235 / 0.12); }
+.shot--closed video { border-radius: 14px; }
+/* Two by two, large enough to read each panel, not a row of swatches. */
+.tints { list-style: none; margin-bottom: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 12px; }
+@media (min-width: 720px) { .tints { gap: 36px 20px; } }
+.tints li { display: grid; gap: 10px; }
+.tints img { width: 100%; height: auto; border-radius: 12px; box-shadow: 0 0 0 1px rgb(242 240 235 / 0.12); }
+.tints span { color: var(--ink-soft); font-size: 14px; }
+.also { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; justify-items: center; text-align: center; }
+.also li { max-width: 36ch; color: var(--ink-soft); font: 500 clamp(19px, 1.9vw, 24px)/1.3 var(--display); letter-spacing: -0.02em; text-wrap: balance; }
+.also b { color: var(--ink); }
+
+/* Download, with the honest part beside it. */
+.get {
+  width: var(--col); margin: var(--gap) auto 0; scroll-margin-top: 40px;
+  display: grid; gap: 56px;
+}
+@media (min-width: 900px) { .get { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: start; } }
+/* The icon's square is a tenth padding on each side, so the tile itself sits on the column's edge. */
+.get__icon { --size: clamp(96px, 9vw, 120px); width: var(--size); height: auto; margin: 0 0 20px calc(var(--size) * -0.0977); }
+.get__title, .faq__title {
+  margin: 0 0 28px;
+  font: 600 clamp(36px, 4.4vw, 60px)/1 var(--display); letter-spacing: -0.045em;
+}
+.get__requires { margin: 18px 0 0; max-width: 40ch; color: var(--ink-soft); font-size: 15px; }
+.get__all { margin: 12px 0 0; font-size: 15px; }
+.get__install { margin-top: 40px; }
+.get__install p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+.install {
+  display: block; margin: 10px 0; padding: 14px 16px; border-radius: 12px;
+  background: #121212; color: var(--ink);
+  font: 400 14px/1.5 var(--mono); overflow-wrap: anywhere; user-select: all;
+}
+.get__aside { max-width: 44ch; }
+
+.first { padding-top: 6px; }
+.first__title { margin: 0 0 20px; font: 700 21px/1.2 var(--sans); }
+.first ol { list-style: none; margin: 0; padding: 0; counter-reset: step; display: grid; gap: 20px; }
+.first li {
+  counter-increment: step; position: relative; padding-left: 48px;
+  color: var(--ink-soft); font-size: 16px;
+}
+.first li::before {
+  content: counter(step); position: absolute; left: 0; top: -2px;
+  color: var(--ink); font: 600 24px/1 var(--display);
+}
+.first li b { color: var(--ink); }
+.first__once { margin: 24px 0 0 48px; color: var(--ink-soft); font-size: 15px; }
+/* Steps 2 and 3 filmed, across both columns so the notice and the Settings pane can be read. */
+.first__film { grid-column: 1 / -1; justify-self: center; width: 100%; max-width: 880px; margin: 0; }
+.first__film figcaption { margin: 0 0 14px; color: var(--ink-soft); font-size: 15px; }
+.first__film video { display: block; width: 100%; height: auto; border-radius: 14px; background: #000; box-shadow: 0 0 0 1px rgb(242 240 235 / 0.12); }
+
+/* Questions, all open: nothing to click to read an answer. */
+.faq { width: var(--col); margin: var(--gap) auto 0; scroll-margin-top: 40px; }
+.faq dl { margin: 0; display: grid; gap: 36px; }
+@media (min-width: 900px) { .faq dl { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 44px 64px; } }
+.faq dt { font-weight: 600; font-size: 17px; }
+.faq dd { margin: 8px 0 0; color: var(--ink-soft); font-size: 16px; }
+.faq dd p { margin: 0; }
+.faq dd p + p { margin-top: 10px; }
+
+/* The dock: the download from anywhere, gone while a Download button can be
+   seen. From 900 px it is a pill in the margin beside the column; on a phone,
+   where the column is the window's width, a bar the page fades into. */
+.dock {
+  position: fixed; right: var(--gutter); bottom: max(24px, env(safe-area-inset-bottom)); z-index: 10;
+  opacity: 0; transform: translateY(12px); visibility: hidden;
+  transition: opacity var(--drain), transform var(--drain), visibility 0s 400ms;
+}
+.dock[data-shown] { opacity: 1; transform: none; visibility: visible; transition: opacity var(--pour), transform var(--pour); }
+@media (max-width: 899px) {
+  .dock { left: 0; right: 0; bottom: 0; padding: 8px var(--gutter) max(16px, env(safe-area-inset-bottom)); background: #000; }
+  .dock::before { content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: 28px; background: linear-gradient(transparent, #000); pointer-events: none; }
+  .dock .button { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .dock, .dock[data-shown] { transform: none; } }
+
+.foot {
+  width: var(--col); margin: var(--gap) auto 0; padding-bottom: calc(108px + env(safe-area-inset-bottom));
+  color: var(--ink-soft); font-size: 14px;
+}
+.foot__brand {
+  display: flex; align-items: center; gap: 9px; margin: 0 0 8px;
+  color: var(--ink); font: 600 17px/1 var(--display); letter-spacing: -0.02em;
+}
+.foot__mark { width: 22px; height: 16px; }
+.foot__links { display: flex; flex-wrap: wrap; gap: 4px 24px; }
+.foot__links a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); }
+.foot__credit { margin: 12px 0 0; max-width: 72ch; }
+.demo__credit { max-width: 58ch; }
+.demo__credit a { white-space: nowrap; }
