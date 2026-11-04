@@ -36,10 +36,11 @@ then paste this into Terminal (Spotlight → Terminal):
 curl -fsSL https://magnetite.app/install.sh | sh
 ```
 
-It downloads the latest official release, checks the published SHA-256 and code
-signature, then installs and opens the app. The checksum and signature confirm
-the download is intact; Apple hasn't reviewed it. Run it again to update. The M menu holds
-settings and Quit.
+It downloads the release this installer is pinned to (the latest when the site
+was last published), checks it against the fingerprint built into the installer
+and its code signature, then installs and opens the app. The checksum and
+signature confirm the download is intact; Apple hasn't reviewed it. Run it again
+to update. The M menu holds settings and Quit.
 
 ## Verify a manual download
 
