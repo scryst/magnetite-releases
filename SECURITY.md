@@ -1,18 +1,25 @@
-# Security
+# Security policy
 
-The latest Magnetite release is the only supported version.
+## Report privately
 
-Report a suspected vulnerability privately to `scrystyt@gmail.com` with
-`Magnetite security` in the subject. Include the affected version, macOS
-version, and reproducible steps. Do not include passwords, access tokens, or
-other secrets.
+Email [scrystyt@gmail.com](mailto:scrystyt@gmail.com) with the subject
+“Magnetite security report”. Do not post exploitable details in public issues.
 
-For ordinary bugs and product feedback, use the public
-[issue tracker](https://github.com/scryst/magnetite/issues).
+Include the affected version, macOS version, reproduction steps, likely impact
+and a minimal example. Don't send Spotify tokens, passwords, your Application
+Support folder or personal files. If you need to share something sensitive,
+say so and we'll arrange a way.
 
-Official binaries and checksum files are published only through this
-repository's [Releases](https://github.com/scryst/magnetite-releases/releases).
-Verify the matching `.sha256` file before opening the app.
+## Scope and support
 
-Magnetite is a personal project maintained on a best-effort basis and does not
-offer a bug bounty.
+Reports about the native app, installer, official website and release
+distribution are welcome. Please reproduce on the latest official release
+where possible; this small project does not promise backports or a response SLA.
+
+Download binaries from
+[scryst/magnetite-releases](https://github.com/scryst/magnetite-releases/releases).
+The current build is ad-hoc signed and not notarised by Apple. The checksum and
+signature confirm the download is intact; they don't prove who built it.
+
+For ordinary bugs, use the [issue tracker](https://github.com/scryst/magnetite/issues).
+For data handling, see the [privacy notice](https://magnetite.app/privacy.html).
