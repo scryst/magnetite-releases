@@ -3,11 +3,10 @@
 Free, open-source Spotify and Apple Music controls in your MacBook notch,
 with ferrofluid that moves to your music.
 
-[![Magnetite turns the MacBook camera notch into sound-driven black ferrofluid.](https://magnetite.app/og.png)](https://magnetite.app/)
+[![Magnetite open under the MacBook notch, with the song's lyrics scrolling under the controls and black ferrofluid pulling down from the notch](docs/player.webp)](https://magnetite.app/media/demo.mp4)
 
-**[Download the latest release](https://github.com/scryst/magnetite-releases/releases/latest)**
-· [See the app](https://magnetite.app/)
-· [Source, features and FAQ](https://github.com/scryst/magnetite)
+**[Download the latest release](https://github.com/scryst/magnetite-releases/releases/latest)**,
+or [see the app](https://magnetite.app/) and its [source, features and FAQ](https://github.com/scryst/magnetite).
 
 Requires **macOS 26 or later on Apple silicon**. Notchless displays use a floating
 pill. This repository holds official binaries and release notes; development
@@ -58,7 +57,7 @@ The matching ZIP must report `OK`. Do not install if the checksum fails.
 - [Features, requirements, permissions and troubleshooting](https://github.com/scryst/magnetite#readme)
 - [Report a bug](https://github.com/scryst/magnetite/issues)
 - [Private security reporting](https://github.com/scryst/magnetite-releases/security/policy)
-- [Privacy](https://magnetite.app/privacy.html) · [Terms](https://magnetite.app/terms.html)
+- [Privacy](https://magnetite.app/privacy.html) and [terms](https://magnetite.app/terms.html)
 - [Source and MIT license](https://github.com/scryst/magnetite)
 
 No Magnetite account, analytics or audio uploads. Optional Spotify authorization
