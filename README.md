@@ -1,16 +1,12 @@
 # Magnetite
 
-Free, open-source Spotify and Apple Music controls in your MacBook notch,
-with ferrofluid that moves to your music.
+Spotify and Apple Music in your MacBook notch, with black ferrofluid that moves to the music. Free and open source.
 
-[![Magnetite open under the MacBook notch, with the song's lyrics scrolling under the controls and black ferrofluid pulling down from the notch](docs/player.webp)](https://magnetite.app/media/demo.mp4)
+<img src="docs/hero.webp" width="640" alt="Magnetite open under the MacBook notch playing Art Deco by Lana Del Rey, the lyric line under the controls, black ferrofluid pulling down from the notch in time with the song">
 
-**[Download the latest release](https://github.com/scryst/magnetite-releases/releases/latest)**,
-or [see the app](https://magnetite.app/) and its [source, features and FAQ](https://github.com/scryst/magnetite).
+**[Download for Mac](https://github.com/scryst/magnetite-releases/releases/latest)**, 725 KB. Needs macOS 26 on Apple silicon.
 
-Requires **macOS 26 or later on Apple silicon**. Notchless displays use a floating
-pill. This repository holds official binaries and release notes; development
-happens in [scryst/magnetite](https://github.com/scryst/magnetite).
+This repository holds the official builds and their checksums. The source, every feature in motion and the FAQ are in [scryst/magnetite](https://github.com/scryst/magnetite); the app's page is [magnetite.app](https://magnetite.app).
 
 ## Install or update
 
@@ -22,8 +18,8 @@ Download the ZIP, then open it the first time like this:
 3. Open System Settings → Privacy & Security and scroll down to Security. Click
    Open Anyway next to Magnetite, then confirm with Touch ID or your password.
 4. Look for the M in the menu bar. Play something in Spotify or Music and hover
-   the notch. Allow the two permission prompts: one to control Spotify or Music,
-   one to record system audio for the visualizer.
+   the notch. Allow the two permission prompts: one to control the player, one
+   to record system audio for the ink.
 
 You only do this once. The build is ad-hoc signed and not notarized by Apple,
 so only open a download you trust.
