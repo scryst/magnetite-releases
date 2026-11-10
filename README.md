@@ -1,10 +1,12 @@
-# Magnetite
+<p align="center">
+  <img src="docs/hero.webp" width="640" alt="Magnetite open under the MacBook notch playing Art Deco by Lana Del Rey, the lyric line under the controls, black ferrofluid pulling down from the notch in time with the song">
+</p>
 
-Spotify and Apple Music in your MacBook notch, with black ferrofluid that moves to the music. Free and open source.
+<h1 align="center">Magnetite</h1>
 
-<img src="docs/hero.webp" width="640" alt="Magnetite open under the MacBook notch playing Art Deco by Lana Del Rey, the lyric line under the controls, black ferrofluid pulling down from the notch in time with the song">
+<p align="center">Spotify and Apple Music in your MacBook notch, with black ferrofluid that moves to the music.<br>Free and open source.</p>
 
-**[Download for Mac](https://github.com/scryst/magnetite-releases/releases/latest)**, 725 KB. Needs macOS 26 on Apple silicon.
+<p align="center"><a href="https://github.com/scryst/magnetite-releases/releases/latest"><b>Download for Mac</b></a><br>725 KB. Needs macOS 26 on Apple silicon.</p>
 
 This repository holds the official builds and their checksums. The source, every feature in motion and the FAQ are in [scryst/magnetite](https://github.com/scryst/magnetite); the app's page is [magnetite.app](https://magnetite.app).
 
