@@ -1,5 +1,10 @@
 <p align="center">
-  <img src="docs/hero.webp" width="640" alt="Magnetite open under the MacBook notch playing Art Deco by Lana Del Rey, the lyric line under the controls, black ferrofluid pulling down from the notch in time with the song">
+  <picture>
+    <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/banner-phone-dark.webp">
+    <source media="(max-width: 600px)" srcset="docs/banner-phone-light.webp">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/banner-dark.webp">
+    <img src="docs/banner-light.webp" width="100%" alt="Magnetite's player under the notch, printed in blue lines: Pop by ILLIT plays, a skip brings Sunsetz by Cigarettes After Sex and then Art Deco by Lana Del Rey, the lyric line changing under the controls and the ferrofluid moving with each song.">
+  </picture>
 </p>
 
 <h1 align="center">Magnetite</h1>
@@ -7,6 +12,10 @@
 <p align="center">Spotify and Apple Music in your MacBook notch, with black ferrofluid that moves to the music.<br>Free and open source.</p>
 
 <p align="center"><a href="https://github.com/scryst/magnetite-releases/releases/latest"><b>Download for Mac</b></a><br>725 KB. Needs macOS 26 on Apple silicon.</p>
+
+<p align="center">
+  <img src="docs/hero.webp" width="640" alt="Magnetite open under the MacBook notch playing Art Deco by Lana Del Rey, the lyric line under the controls, black ferrofluid pulling down from the notch in time with the song">
+</p>
 
 This repository holds the official builds and their checksums. The source, every feature in motion and the FAQ are in [scryst/magnetite](https://github.com/scryst/magnetite); the app's page is [magnetite.app](https://magnetite.app).
 
