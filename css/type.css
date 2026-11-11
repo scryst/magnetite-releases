@@ -1,0 +1,8 @@
+/* Geist, variable weight 100–900, Latin subset, self-hosted. OFL: fonts/OFL-Geist.txt. */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../fonts/geist-var-latin.woff2') format('woff2');
+}
