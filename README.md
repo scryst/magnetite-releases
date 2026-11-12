@@ -3,7 +3,7 @@
     <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="docs/banner-phone-dark.webp">
     <source media="(max-width: 600px)" srcset="docs/banner-phone-light.webp">
     <source media="(prefers-color-scheme: dark)" srcset="docs/banner-dark.webp">
-    <img src="docs/banner-light.webp" width="100%" alt="Magnetite's player under the notch, printed in blue lines: Pop by ILLIT plays, a skip brings Sunsetz by Cigarettes After Sex and then Art Deco by Lana Del Rey, the lyric line changing under the controls and the ferrofluid moving with each song.">
+    <img src="docs/banner-light.webp" width="100%" alt="Magnetite's player under the notch, printed in blue lines: Sunsetz by Cigarettes After Sex plays, a skip brings Art Deco by Lana Del Rey and then Pop by ILLIT, the lyric line changing under the controls and the ferrofluid moving with each song.">
   </picture>
 </p>
 
@@ -21,19 +21,14 @@ This repository holds the official builds and their checksums. The source, every
 
 ## Install or update
 
-Download the ZIP, then open it the first time like this:
+The first time, open it like this:
 
-1. Open the ZIP, drag Magnetite to Applications, then double-click it.
-2. macOS says it can't verify Magnetite. That's expected for a free app that
-   isn't in Apple's paid program. Click Done.
-3. Open System Settings → Privacy & Security and scroll down to Security. Click
-   Open Anyway next to Magnetite, then confirm with Touch ID or your password.
-4. Look for the M in the menu bar. Play something in Spotify or Music and hover
-   the notch. Allow the two permission prompts: one to control the player, one
-   to record system audio for the ink.
+1. Download the ZIP from the [latest release](https://github.com/scryst/magnetite-releases/releases/latest), drag **Magnetite** to Applications and double-click it.
+2. macOS says it can't verify Magnetite. Click **Done**, not Move to Trash. A free app outside Apple's paid program gets this warning.
+3. Open **System Settings → Privacy & Security**, scroll to **Security** and click **Open Anyway** next to Magnetite and enter your password.
+4. Look for the **M** in the menu bar. Play something in Spotify or Music, hover the notch and allow the two prompts: one to control the player, one to record system audio for the ink.
 
-You only do this once. The build is ad-hoc signed and not notarized by Apple,
-so only open a download you trust.
+You do this once. Magnetite is ad-hoc signed and not notarized by Apple, so only open a copy you downloaded from here.
 
 Prefer to skip the warning? [Inspect the installer](https://github.com/scryst/magnetite/blob/main/install.sh),
 then paste this into Terminal (Spotlight → Terminal):
